@@ -16,11 +16,4 @@
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-  	<dependency>
-  		<groupId>UpdateCenterCommon</groupId>
-  		<artifactId>UpdateCenterCommon</artifactId>
-  		<version>0.1</version>
-  	</dependency>
-  </dependencies>
 </project>
