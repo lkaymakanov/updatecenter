@@ -4,9 +4,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+
+import net.is_bg.updatercenter.common.Enumerators;
 import net.is_bg.updatercenter.common.Enumerators.PARAMS;
 import net.is_bg.updatercenter.common.Enumerators.REST_PATH;
 import net.is_bg.updatercenter.common.crc.Crc;
@@ -14,14 +22,22 @@ import net.is_bg.updatercenter.common.resources.Session;
 import net.is_bg.updatercenter.common.resources.VersionInfo;
 import net.is_bg.updatercenter.common.zippack.Packager;
 
-import org.codehaus.jackson.JsonProcessingException;
 
+
+
+
+
+
+
+
+
+import com.cc.rest.client.ClientConfigurator;
 import com.cc.rest.client.Requester;
-import com.cc.rest.client.Requester.ACCEPT_TYPE;
+import com.cc.rest.client.Requester.MEDIA_TYPE;
 
 import file.splitter.ByteChunk;
 
-public class LtfVersionUpdater {
+public class VersionUpdater {
 	
 	//names of the params that go in server xml!!!!
 	private static String downloadDir = "downloaddir"; 		  //list with comma separated jar files
@@ -82,107 +98,70 @@ public class LtfVersionUpdater {
 	private String port = "8080";
 	private String context= "UpdateCenter";
 	private String endpoint = protocol+"://" + serverIp + ":" + port + "/" + context;
+	private String appName = "";
+	private String sessionid = "1234";
 	
-	public LtfVersionUpdater(){
-		this("http", "localhost", "8080");
+	public VersionUpdater() throws UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException{
+		this("http", "localhost", "8080", "ltf");
 	}
 	
-	public LtfVersionUpdater(String protocol, String serverIp, String port){
+	public VersionUpdater(String protocol, String serverIp, String port, String application) throws UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException{
 		this.protocol = protocol;
 		this.serverIp = serverIp;
 		this.port = port;
 		endpoint = protocol+"://" + serverIp + ":" + port + "/" + context;
+		ClientConfigurator.configure().targetEndpoint(endpoint).readTimeout(600).noSSL().complete();
+		appName = application;
 	}
 	
-	private VersionInfo getVersionInfo() throws JsonProcessingException, IOException {
-		VersionInfo v = Requester.create()
-				.endpoint(endpoint)
-				.path(REST_PATH.LTF)
-				.subPath(REST_PATH.CURRENT_VERSION)
-				.get(ACCEPT_TYPE.JSON)
-				.getResponseObject(VersionInfo.class);
-		
+	public VersionInfo getVersionInfo() throws  Exception {
+		VersionInfo v = Requester.request().path(REST_PATH.APP)
+				.subPath(Enumerators.getVersionSubPath(appName)).queryParam(PARAMS.SESSION_ID, sessionid)
+				.get(MEDIA_TYPE.JSON).getResponseObject(VersionInfo.class);
 		return v;
 	}
 	
-	private Session getSession() throws JsonProcessingException, IOException {
-		Session session = Requester.create()
-				.endpoint(endpoint)
-				.path(REST_PATH.LTF)
-				.subPath(REST_PATH.GET_SESSION)
-				.get(ACCEPT_TYPE.JSON)
+	public Session getSession() throws  Exception {
+		Session session = Requester.request().path(REST_PATH.APP)
+				.subPath(Enumerators.getCreateSessionSubPath(appName))
+				.get(MEDIA_TYPE.JSON)
 				.getResponseObject(Session.class);
 		return session;
 	}
-	
-	
-	private ByteChunk getChunkNo(long chunkNo, String sessionId) throws JsonProcessingException, IOException {
-		return Requester.create()
-				.endpoint(endpoint)
-				.path(REST_PATH.LTF)
-				.subPath(REST_PATH.GET_CHUNK_NO)
-				.pathParam(chunkNo)
-				.setParam(PARAMS.SESSION_ID, sessionId)
-				.get(ACCEPT_TYPE.JSON)
-				.getResponseObject(ByteChunk.class);
-	}
-	
+
 	/**
-	 * Retrieves a file from update server by fileName - used to download the application  libs!!!
+	 * Retrieves a file from update server by fileName - used to download the application files!!!
 	 * @param fileName
 	 * @param sessionId
 	 * @return
+	 * @throws Exception 
 	 * @throws JsonProcessingException
-	 * @throws IOException
 	 */
-	private ByteChunk getFileByFileName(String fileName, String sessionId) throws JsonProcessingException, IOException {
-		return Requester.create()
-				.endpoint(endpoint)
-				.path(REST_PATH.LTF)
-				.subPath(REST_PATH.GET_FILE)
-				.setParam(PARAMS.FILE_NAME, fileName)
-				.setParam(PARAMS.SESSION_ID, sessionId)
-				.get(ACCEPT_TYPE.JSON)
-				.getResponseObject(ByteChunk.class);
+	public byte []  getFileByFileName(String fileName, String sessionId) throws  Exception {
+		return Requester.request()
+				.path(REST_PATH.APP)
+				.subPath(Enumerators.getFileSubPath(appName, fileName))
+				.queryParam(PARAMS.SESSION_ID,  sessionid)
+				.get(MEDIA_TYPE.JSON)
+				.getResponseObject(byte [].class);
 	}
 	
-	/**
-	 * Check if the input sessionId is still active!!!
-	 * @param sessionId
-	 * @return
-	 * @throws JsonProcessingException
-	 * @throws IOException
-	 */
-	private boolean isSessionActive(String sessionId) throws JsonProcessingException, IOException{
-		return Requester.create()
-				.endpoint(endpoint)
-				.path(REST_PATH.LTF)
-				.subPath(REST_PATH.IS_SESSION_ACTIVE)
-				.setParam(PARAMS.SESSION_ID, sessionId)
-				.get(ACCEPT_TYPE.JSON)
-				.getResponseObject(Boolean.class);
-	}
 
-	public void update() throws JsonProcessingException, IOException, InterruptedException {
+	public void update() throws  Exception {
 		// TODO Auto-generated method stub
 		//get the last version from the server & the pieces it is split into
 		VersionInfo v = getVersionInfo();
 		System.out.println(v);
 		
-		//get session first
-		if(!isSessionActive(currentSessionId)){
-			Session session = getSession();
-			currentSessionId = session.getSessionId();
-		}
 		
 		//save received buffers to a file at the client side...
 		String zipVersionFile = CONTEXTPARAMS.DOWNLOAD_ROOT_DIR.getValue() + File.separator +  v.fileName +"nolib";
 		File res = new File(zipVersionFile);
 		OutputStream os = new FileOutputStream(res);
 		int i = 0;
-		ByteChunk b;
+		ByteChunk b = new ByteChunk();
 		while(i < v.chunksNumber){
-		    b = getChunkNo(i, currentSessionId);
+		    b.buffer = (byte []) getFileByFileName(String.valueOf(i), currentSessionId);
 			System.out.println("Byte Chunk number " +  i + " with size " + b.size + " Bytes received successfuly" );
 			os.write(b.buffer, 0, b.size);
 			Thread.sleep(2000);
@@ -201,7 +180,7 @@ public class LtfVersionUpdater {
 			res = new File(CONTEXTPARAMS.DOWNLOAD_LIB_DIR.getValue() + File.separator +  s);
 			if(res.exists()){  continue; }
 		    
-			b = getFileByFileName(s, currentSessionId);
+			b.buffer = (byte [])getFileByFileName(s, currentSessionId);
 		    //save the received buffer to file in lib dir!!!
 			os = new FileOutputStream(res);
 			os.write(b.buffer, 0, b.size);

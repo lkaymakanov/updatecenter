@@ -1,22 +1,20 @@
 package net.test;
 
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonProcessingException;
+import net.is_bg.updatercenter.common.resources.Session;
+import net.is_bg.updatercenter.common.resources.VersionInfo;
 
-import com.cc.rest.client.error.PostDBException;
-import com.sun.jersey.api.client.UniformInterfaceException;
+
 
 
 public class Test {
 	
 	
 
-	public static void main(String[] args) throws JsonProcessingException, IOException, UniformInterfaceException, PostDBException, InterruptedException {
+	public static void main(String[] args) throws  Exception {
 		Map<String, String> keyVal = new HashMap<String, String>();
 		
 		if(args != null){
@@ -38,11 +36,15 @@ public class Test {
 		String protocol = keyVal.get("-proto")!=null ? keyVal.get("-proto") : "http";
 		String server =   keyVal.get("-s")!=null ? keyVal.get("-s") : "localhost";
 		String port =  keyVal.get("-p")!=null ? keyVal.get("-p") : "8080";
+		String application = "onlinereport";
 		
-		LtfVersionUpdater updater = new LtfVersionUpdater(protocol, server, port);
-		updater.update();
+		VersionUpdater updater = new VersionUpdater(protocol, server, port, application);
+		Session s = updater.getSession();
+		VersionInfo info = updater.getVersionInfo();
+		updater.getFileByFileName("0", "dwdwfwf");
+		
 		//Packager.unZipIt("D:\\New folder (2)\\LTF-1.2-6866.warnolib", "D:\\New folder (2)\\unzipappdir");
-		System.out.println(new File(new File(".").getCanonicalPath()).getParentFile());
+		//System.out.println(new File(new File(".").getCanonicalPath()).getParentFile());
 	}
 	
 }
