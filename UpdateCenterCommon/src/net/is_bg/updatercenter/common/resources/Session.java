@@ -41,7 +41,7 @@ public class Session {
 		return lastAccesTime;
 	}
 
-	void setLastAccesTime(long lastAccesTime) {
+	protected void setLastAccesTime(long lastAccesTime) {
 		this.lastAccesTime = lastAccesTime;
 	}
 

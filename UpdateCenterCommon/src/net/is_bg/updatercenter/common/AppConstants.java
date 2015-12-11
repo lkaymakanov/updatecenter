@@ -7,6 +7,8 @@ public class AppConstants {
 	// REST PATHS
 	public final static String PATH_LTF = "/ltf";
 	public final static String PATH_TEST = "/test";
+	public final static String PATH_APPLICATION ="/app";
+	
 	//REST SUBPATHS
 	public final static String SUBPATH_UPDATE_CLIENT_INFO = "/updateclientinfo";
 	public final static String SUBPATH_CURRENT_VERSION = "/currentversion";
