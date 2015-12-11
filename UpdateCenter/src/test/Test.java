@@ -2,7 +2,6 @@ package test;
 
 import java.io.IOException;
 
-import version.LtfVersionDescription;
 
 
 
@@ -14,9 +13,10 @@ public class Test {
 
 	public static void main(String [] test) throws IOException{
 		
-		LtfVersionDescription des = new LtfVersionDescription();
+	/*	WarVersionDescriptionImpl des = new  WarVersionDescriptionImpl((String)CONTEXTPARAMS.LTF_UPDATE_ROOT_DIR.getValue(),
+				 (String)CONTEXTPARAMS.LTF_WAR_FILE.getValue(), "[lL][tT][fF]-1.2-(\\d)+.[wW][aA][rR]", 5*1024*1024, 8);*/
 		
-		System.out.println(des.getVersionInfo());
+		//System.out.println(des.getVersionInfo());
 		
 		/*Session s = null;
 		do{

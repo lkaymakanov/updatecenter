@@ -3,10 +3,10 @@
   <display-name>UpdateCenter</display-name>
   <servlet>
   <servlet-name>Jersey servlet</servlet-name>
-  <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-  <init-param>
-   <param-name>com.sun.jersey.config.property.packages</param-name>
-   <param-value>net.is_bg.controller, com.cc.rest.jersey</param-value>
+  <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+ <init-param>
+   <param-name>javax.ws.rs.Application</param-name>
+   <param-value>net.is_bg.controller.ApplicationResources</param-value>
   </init-param>
   <init-param>
    <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>

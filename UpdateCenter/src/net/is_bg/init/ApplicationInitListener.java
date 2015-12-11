@@ -1,5 +1,6 @@
 package net.is_bg.init;
 
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -7,8 +8,10 @@ import javax.servlet.annotation.WebListener;
 
 
 
+
 import version.VersionDescriptions;
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
+import net.is_bg.controller.ApplicationLibFiles;
 
 
 @WebListener("Application init listener")
@@ -24,7 +27,11 @@ public class ApplicationInitListener implements ServletContextListener {
 		//SessionRegister.init();
 		CONTEXTPARAMS.printParams();
 		
-		VersionDescriptions.getLtfDescription();
+		//init application lib files
+		ApplicationLibFiles.initApplicationLibFiles((String)CONTEXTPARAMS.SERVER_LIB_DIR.getValue());
+		
+		//init version descriptions
+		VersionDescriptions.initDescriptions();
 		
 		System.out.println("======================= CONTEXT INITIALIZED =======================");
 	}
