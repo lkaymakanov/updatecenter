@@ -11,7 +11,7 @@ import com.cc.rest.jersey.ObjectMapperProvider;
  */
 public class ApplicationResources extends CCRestResources {
     public ApplicationResources() {
-		packages("net.is_bg.controller");
+		packages(AppConstants.CONTROLLER_PACKAGE);
 		// Override date format
 		ObjectMapperProvider.getObjectMapper(MEDIA_TYPE.JSON).setDateFormat(ObjectMapperProvider.DATE_FORMAT_ISO8601_WITHOUT_TIME);
 		ObjectMapperProvider.getObjectMapper(MEDIA_TYPE.XML).setDateFormat(ObjectMapperProvider.DATE_FORMAT_ISO8601_WITHOUT_TIME);

@@ -6,27 +6,19 @@ import net.is_bg.updatercenter.common.context.ContextUtils;
 public class AppConstants {
 	
 	//names of the params that go in server xml!!!!
-	private static String serverlibdir = "serverlibdir"; 		  //list with comma separated jar files
-	private static String ltfscriptdir = "ltfscriptdir";   		  //list with comma separated script files
-	private static String ltfwar = "ltfwar";                	  //the war file name!!!
-	private static String ltfupadterootdir = "ltfupadterootdir";  //the war file directory!!!
-	private static String ltfscriptfile = "ltfscriptfile";
-	private static String deploy = "deploy";
+	private static String serverlibdir = "serverlibdir";                 			  //the directory containing the jar libs on the server!!!
+	private static String versionsrootdir = "versionsrootdir";			 			  //the directory containing the versions available for update!!!
+	private static String updatecenterroot = "updatecenterroot";                      //update center root directory
+	public static final String CONTROLLER_PACKAGE = "net.is_bg.controller";           //the package that contains controllers
 	
+	public static final String VERSION_NUMBER_PREFIX = "-1.2-";
 	
 	public enum CONTEXTPARAMS{
 			
 		//task scheduler params
-		SERVER_LIB_DIR(serverlibdir, ContextUtils.getParam(serverlibdir, String.class, "D:\\updatecenterroot\\libs"), String.class),
-		LTF_UPDATE_ROOT_DIR(ltfupadterootdir, ContextUtils.getParam(serverlibdir, String.class, "D:\\updatecenterroot\\ltf"), String.class),
-		LTF_SCRIPT_DIR(ltfscriptdir,  ContextUtils.getParam(ltfscriptdir, String.class, "D:\\updatecenterroot"),  String.class),
-		LTF_WAR_FILE(ltfwar, ContextUtils.getParam(ltfwar, String.class, "LTF-1.2-6866.war"), String.class),
-		LTF_DEPLOY(deploy, ContextUtils.getParam(ltfwar, Boolean.class, true), Boolean.class),
-		LTF_SCRIPT_FILE(ltfscriptfile,  ContextUtils.getParam(ltfwar, String.class, "scripts-6866.sql"), String.class),
-		
-		ONLINE_REPORT_WAR_FILE("onlinereportwar", ContextUtils.getParam("onlinereportwar", String.class, "OnlineReportWSClient-1.2-1111.war"), String.class),
-		ONLINE_REPORT_ROOT_DIR("onlinereportrootdir", ContextUtils.getParam("onlinereportrootdir", String.class, "D:\\updatecenterroot\\onlinereport"), String.class);
-		
+		UPDATE_CENTER_LIB_DIR(serverlibdir, ContextUtils.getParam(serverlibdir, String.class, "D:\\updatecenterroot\\libs"), String.class),
+		UPDATE_CENTER_VERSIONS_DIR(versionsrootdir, ContextUtils.getParam(versionsrootdir, String.class, "D:\\updatecenterroot\\versions"), String.class), 
+		UPDATE_CENTER_ROOT(updatecenterroot, ContextUtils.getParam(updatecenterroot, String.class, "D:\\updatecenterroot"), String.class);
 
 		<T> CONTEXTPARAMS(String name, T defaultValue,  Class<T> c){
 			this.name = name;
@@ -57,7 +49,28 @@ public class AppConstants {
 			}
 		}
 	}
+	
+	
+	/***
+	 * Match each file name in the version directory against the valid patterns!!!
+	 * If pattern matches create a version description for that file!!!
+	 * @author lubo
+	 *
+	 */
+	public enum VERSION_VALIDATION_PATTERNS{
+		LTF("[lL][tT][fF]-1.2-(\\d)+.[wW][aA][rR]"),
+		ONLINE_REPORT("[Oo][nN][Ll][Ii][Nn][Ee][Rr][Ee][Pp][Oo][Rr][Tt][Ww][Ss][Cc][Ll][Ii][Ee][Nn][Tt]-1.2-(\\d)+.[wW][aA][rR]");
 		
-
+		private VERSION_VALIDATION_PATTERNS(String pattern){
+			this.pattern = pattern;
+		}
+		
+		private String pattern;
+		public String getPattern() {
+			return pattern;
+		}
+	}
+		
+	
 	
 }

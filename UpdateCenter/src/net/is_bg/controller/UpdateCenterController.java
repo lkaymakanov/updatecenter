@@ -27,12 +27,12 @@ public class UpdateCenterController {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{appname}/versioninfo/")
+	@Path("/{appname}" + AppConstants.VERSION_INFO_SUB_PATH)
 	public VersionInfo getUpdate(@Context UriInfo info){
 		System.out.println(info.getAbsolutePath());
 		List<String> s = info.getQueryParameters().get("sessionid");
 		String [] a  =  info.getPath(true).split("/");
-		String sessionId = (s ==null || s.size() < 1 ? null  : s.get(0));
+		String sessionId = (s == null || s.size() < 1 ? null  : s.get(0));
 		System.out.println(info.getPath(true));
 		return  UpdateCenterDispatcher.dispatchVersionInfoRequest(a[1], sessionId);//VersionDescriptions.getLtfDescription().getVersionInfo();
 	}
@@ -45,7 +45,7 @@ public class UpdateCenterController {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{appname}/session/")
+	@Path("/{appname}" + AppConstants.CREATE_SESSION_SUB_PATH)
 	public Session getSession(@Context UriInfo info){
 		System.out.println(info.getAbsolutePath());
 		System.out.println(info.getQueryParameters().get("sessionid"));
@@ -61,12 +61,12 @@ public class UpdateCenterController {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{appname}/file/{name}/")
+	@Path("/{appname}"  + AppConstants.FILE_SUB_PATH + "/{name}/")
 	public byte [] getFileByName(@Context UriInfo info){
 		System.out.println(info.getAbsolutePath());
 		List<String> s = info.getQueryParameters().get("sessionid");
 		String [] a  =  info.getPath(true).split("/");
-		String sessionId = (s ==null || s.size() < 1 ? null  : s.get(0));
+		String sessionId = (s == null || s.size() < 1 ? null  : s.get(0));
 		return   UpdateCenterDispatcher.dispatchFileRequest(a[1], a[a.length-1], sessionId);//VersionDescriptions.getLtfDescription().getFileByFileName(a[a.length-1]);
 	}
 	
@@ -76,7 +76,7 @@ public class UpdateCenterController {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/updates/")
+	@Path(AppConstants.UPDATES_SUB_PATH)
 	public String getAvailableUpdates(){
 		String s = "";
 		for(CommonVersionDescription v : VersionDescriptions.getDescriptions()){
@@ -92,7 +92,7 @@ public class UpdateCenterController {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/sessions/")
+	@Path(AppConstants.SESSIONS_SUB_PATH)
 	public Set<String> getSessions(@Context UriInfo info){
 		return AppUtil.getSessionRegister().getSessionIds();
 	}
@@ -105,7 +105,7 @@ public class UpdateCenterController {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/libs/")
+	@Path(AppConstants.LIBS_SUB_PATH)
 	public Set<String> getLibraries(){
 		return AppUtil.getApplicationLibFiles().getLibFiles();
 	}

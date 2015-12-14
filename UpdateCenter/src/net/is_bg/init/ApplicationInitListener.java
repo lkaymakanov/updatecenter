@@ -28,7 +28,7 @@ public class ApplicationInitListener implements ServletContextListener {
 		CONTEXTPARAMS.printParams();
 		
 		//init application lib files
-		ApplicationLibFiles.initApplicationLibFiles((String)CONTEXTPARAMS.SERVER_LIB_DIR.getValue());
+		ApplicationLibFiles.initApplicationLibFiles((String)CONTEXTPARAMS.UPDATE_CENTER_LIB_DIR.getValue());
 		
 		//init version descriptions
 		VersionDescriptions.initDescriptions();

@@ -2,7 +2,6 @@ package net.is_bg.controller;
 
 import java.io.File;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
@@ -46,7 +45,7 @@ public class ApplicationLibFiles {
 	
 	public  static void  initApplicationLibFiles(String libDir) {
 		if(f == null) f = new  ApplicationLibFiles();
-		FileUtil.traverseDirs(new File((String)CONTEXTPARAMS.SERVER_LIB_DIR.getValue()), new TraverseDirsCallBack() {
+		FileUtil.traverseDirs(new File((String)CONTEXTPARAMS.UPDATE_CENTER_LIB_DIR.getValue()), new TraverseDirsCallBack() {
 			@Override
 			public void OnReturnFromRecursion(File node) {
 				// TODO Auto-generated method stub

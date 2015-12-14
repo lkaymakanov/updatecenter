@@ -11,6 +11,13 @@ import java.nio.channels.FileChannel;
 
 public final class FileUtil {
 	
+	public static void createDirIfNotExist(String dirName){
+		File f = new File(dirName);
+		if (!f .exists()) {
+			f.mkdir();
+		}
+	}
+	
 	/**Traverse directory trees
 	 * 
 	 * @param node - the current file node

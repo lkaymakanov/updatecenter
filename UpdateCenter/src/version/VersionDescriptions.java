@@ -1,12 +1,12 @@
 package version;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
-
-
+import net.is_bg.controller.AppConstants.VERSION_VALIDATION_PATTERNS;
 
 
 /**
@@ -16,48 +16,81 @@ import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
  */
 public class VersionDescriptions {
 	
-	
-
-	//ltf version description
-	private static  WarVersionDescription ltfVersionDescription;
-	private static  WarVersionDescription onlineReportVersionDescription;
-	private static  List<CommonVersionDescription> descriptions = new  ArrayList<CommonVersionDescription>();
+	/***
+	 * A map containing the name  version name & description of the version!!!
+	 */
+	public static Map<String, WarVersionDescription> verNameDescMap = new ConcurrentHashMap<String, WarVersionDescription>();
 	
 	
-	public static WarVersionDescription getLtfDescription() {
-		if(ltfVersionDescription == null )
-			try {
-				ltfVersionDescription = new  WarVersionDescriptionEx((String)CONTEXTPARAMS.LTF_UPDATE_ROOT_DIR.getValue(),
-						 (String)CONTEXTPARAMS.LTF_WAR_FILE.getValue(), "[lL][tT][fF]-1.2-(\\d)+.[wW][aA][rR]", 5*1024*1024, 8, true);
-				descriptions.add(ltfVersionDescription);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-		return ltfVersionDescription;
-	}
 	
-	public static WarVersionDescription getOnlineReportVersionDescription(){
-		if(onlineReportVersionDescription == null ){
-			try {
-				onlineReportVersionDescription = new WarVersionDescriptionEx((String)CONTEXTPARAMS.ONLINE_REPORT_ROOT_DIR.getValue(),
-						 (String)CONTEXTPARAMS.ONLINE_REPORT_WAR_FILE.getValue(), "[Oo][nN][Ll][Ii][Nn][Ee][Rr][Ee][Pp][Oo][Rr][Tt][Ww][Ss][Cc][Ll][Ii][Ee][Nn][Tt]-1.2-(\\d)+.[wW][aA][rR]", 5*1024*1024, 25, true);
-				descriptions.add(onlineReportVersionDescription);
-			}catch(Exception ex){
-				ex.printStackTrace();
-				throw new RuntimeException(ex);
+	/**
+	 * Creates descriptions for all war files that are located in the VERSIONS_ROOT_DIR & match VERSION_VALIDATION_PATTERNS!!!!
+	 */
+	public static void initDescriptions() {
+		String versionDir = (String)CONTEXTPARAMS.UPDATE_CENTER_VERSIONS_DIR.getValue();
+		//read version folder & get war files
+		File verDir = new  File(versionDir);
+		if(!verDir.isDirectory()) return;
+		
+		for(String f : verDir.list()){
+			File child = new File(f);
+			if(child.isDirectory()) continue;
+			
+			for(VERSION_VALIDATION_PATTERNS pt : VERSION_VALIDATION_PATTERNS.values()){
+				if(matchVersionPattern(child.getName(), pt.getPattern())){
+					String prefix = child.getName().split("-1.2-")[0];
+					try{
+						addWarVersionDescription(child.getName(),   new WarVersionDescriptionEx(versionDir, 
+								child.getName(), pt.getPattern(), 5*1024*1024, prefix.length() + 5, true) );
+					}catch(Exception ex){
+						continue;
+					}
+				}
+				
 			}
 		}
-		return onlineReportVersionDescription;
 	}
 	
-	public static void initDescriptions(){
-		getLtfDescription();
-		getOnlineReportVersionDescription();
+	public static Collection<WarVersionDescription> getDescriptions(){
+		return verNameDescMap.values();
 	}
 	
-	public static List<CommonVersionDescription> getDescriptions(){
-		return descriptions;
+	/***
+	 * Retrieves WarVersionDescription by name!!!
+	 * @param versionName
+	 * @return
+	 */
+	public static  WarVersionDescription getVersionDescription(String versionName){
+		return verNameDescMap.get(versionName);
 	}
+	
+	
+	/***
+	 * Adds a version description to the description map!!!
+	 * @param versionName
+	 * @param description
+	 */
+	public static void addWarVersionDescription(String versionName, WarVersionDescription description){
+		verNameDescMap.put(versionName, description);
+	}
+	
+	/***
+	 * Matches a version file name against the pattern!!!
+	 * @param fileName
+	 * @param pattern
+	 * @return
+	 */
+	private static boolean  matchVersionPattern(String fileName, String pattern){
+		boolean validPattern = false;
+		VersionValidator v = null;
+		try{
+			v = new VersionValidator(fileName, pattern);
+			validPattern = v.validate();
+		}catch(Exception e){
+			validPattern = false;
+		}
+		
+		return validPattern;
+	}
+	
 }

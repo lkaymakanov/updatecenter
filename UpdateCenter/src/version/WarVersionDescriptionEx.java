@@ -51,6 +51,7 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 	
 	/**A map that contains the the library file names + the chunks number as string.
 	 * The boolean value indicates whether file is on disk or it's a chunk. 
+	 * The lib files will be on disk & the chunks either in memory or on disk depending on the file splitter!!!
 	 * Used to refer to both chunks and library files only by name.True value indicates file is on disk and false indicates 
 	 * file is chunk!*/
 	private Map<String, Boolean> fileNameMap = new Hashtable<String, Boolean>();
@@ -60,23 +61,28 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 			String root, String warfile, String pattern, int chunkSize, int prefixLength , boolean deploy
 			) throws IOException{
 		
-	    this.root = root;
 		Set<String> libFileSet = new TreeSet<String>();
 		
 		int lastdot = warfile.lastIndexOf(".");
+		String wNameWithouExt =  warfile.substring(0, lastdot);
+		
+		//create the directory wieht the version
+		FileUtil.createDirIfNotExist(root + File.separator + wNameWithouExt);
+		this.root = root + File.separator + wNameWithouExt;
+			
 		
 		//dir names 
-		unzippedFolder =  warfile.substring(0, lastdot) + "_unzipped";
-		serverLibDir = (String)CONTEXTPARAMS.SERVER_LIB_DIR.getValue();
-		ltfNolibWar =  warfile.substring(0, lastdot)  + "nolib";
+		unzippedFolder =  wNameWithouExt + "_unzipped";
+		serverLibDir = (String)CONTEXTPARAMS.UPDATE_CENTER_LIB_DIR.getValue();
+		ltfNolibWar =  wNameWithouExt + "nolib";
 		
 		 //absolute paths to dirs & files
-		unzippedFolderPath = root + File.separator +  unzippedFolder;
-		warfilePath = root + File.separator +   warfile;
+		unzippedFolderPath = this.root + File.separator +  unzippedFolder;
+		warfilePath = CONTEXTPARAMS.UPDATE_CENTER_VERSIONS_DIR.getValue()  + File.separator +   warfile;
 		applicationlibPath = unzippedFolderPath + File.separator + "WEB-INF\\lib";
 		//private	String libCopyDirPath =  root + File.separator +  libCopyDir;
-	    ltfNolibWarPath = root + File.separator +  ltfNolibWar;
-		libDescriptionFile = root + File.separator + warfile + ".libs";
+	    ltfNolibWarPath = this.root  + File.separator +  ltfNolibWar;
+		libDescriptionFile = this.root  + File.separator + warfile + ".libs";
 		
 		
 		this.fileDestination = warfilePath;
