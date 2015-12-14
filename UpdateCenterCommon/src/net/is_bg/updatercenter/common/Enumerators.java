@@ -47,43 +47,43 @@ public class Enumerators {
 	
 	public static IREST_PATH getVersionSubPath(String appName){
 		SELECTIVE_PATHS p = new  SELECTIVE_PATHS();
-		p.setPath("/" + appName + "/versioninfo/");    
+		p.setPath("/" + appName + AppConstants.VERSION_INFO_SUB_PATH);    
 		return p;
 	}
 	
 	public static IREST_PATH getFileSubPath(String appName, String fName){
 		SELECTIVE_PATHS p = new  SELECTIVE_PATHS();
-		p.setPath("/" + appName + "/file/" + fName);
+		p.setPath("/" + appName + AppConstants.FILE_SUB_PATH + "/" + fName);
 		return p;
 	}
 	
 	
 	public static IREST_PATH getCreateSessionSubPath(String appName){
 		SELECTIVE_PATHS p = new  SELECTIVE_PATHS();
-		p.setPath("/" + appName + "/session/");
+		p.setPath("/" + appName + AppConstants.CREATE_SESSION_SUB_PATH);
 		return p;
 	}
 	
 	public static IREST_PATH getSessionsSubPath(){
 		SELECTIVE_PATHS p = new  SELECTIVE_PATHS();
-		p.setPath("/sessions/");
+		p.setPath(AppConstants.SESSIONS_SUB_PATH + "/");
 		return p;
 	}
 	
 	public static IREST_PATH getUpdatesSubPath(){
 		SELECTIVE_PATHS p = new  SELECTIVE_PATHS();
-		p.setPath("/updates/");
+		p.setPath(AppConstants.UPDATES_SUB_PATH);
 		return p;
 	}
 	
 	public static IREST_PATH getLibsSubPath(){
 		SELECTIVE_PATHS p = new  SELECTIVE_PATHS();
-		p.setPath("/libs/");
+		p.setPath(AppConstants.LIBS_SUB_PATH + "/");
 		return p;
 	}
 	
 	
-	public static class SELECTIVE_PATHS implements IREST_PATH{
+	private static class SELECTIVE_PATHS implements IREST_PATH{
 		private String path;
 		void setPath(String path){
 			this.path = path;
