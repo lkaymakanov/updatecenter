@@ -5,20 +5,21 @@ import net.is_bg.updatercenter.common.context.ContextUtils;
 
 public class AppConstants {
 	
-	//names of the params that go in server xml!!!!
+	//names of the parameters that go in server xml!!!!
 	private static String serverlibdir = "serverlibdir";                 			  //the directory containing the jar libs on the server!!!
 	private static String versionsrootdir = "versionsrootdir";			 			  //the directory containing the versions available for update!!!
 	private static String updatecenterroot = "updatecenterroot";                      //update center root directory
+	private static String versionnumberprefix = "versionnumberprefix";
+	
 	public static final String CONTROLLER_PACKAGE = "net.is_bg.controller";           //the package that contains controllers
 	
-	public static final String VERSION_NUMBER_PREFIX = "-1.2-";
 	
 	public enum CONTEXTPARAMS{
 			
-		//task scheduler params
 		UPDATE_CENTER_LIB_DIR(serverlibdir, ContextUtils.getParam(serverlibdir, String.class, "D:\\updatecenterroot\\libs"), String.class),
 		UPDATE_CENTER_VERSIONS_DIR(versionsrootdir, ContextUtils.getParam(versionsrootdir, String.class, "D:\\updatecenterroot\\versions"), String.class), 
-		UPDATE_CENTER_ROOT(updatecenterroot, ContextUtils.getParam(updatecenterroot, String.class, "D:\\updatecenterroot"), String.class);
+		UPDATE_CENTER_ROOT(updatecenterroot, ContextUtils.getParam(updatecenterroot, String.class, "D:\\updatecenterroot"), String.class),
+		UPDATE_CENTER_VERSION_NUMBER_PREFIX(versionnumberprefix, ContextUtils.getParam(versionnumberprefix, String.class, "-1.2-"), String.class);
 
 		<T> CONTEXTPARAMS(String name, T defaultValue,  Class<T> c){
 			this.name = name;
