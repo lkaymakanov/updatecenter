@@ -30,7 +30,7 @@ public class UpdateCenterController {
 	@Path("/{appname}" + AppConstants.VERSION_INFO_SUB_PATH)
 	public VersionInfo getUpdate(@Context UriInfo info){
 		System.out.println(info.getAbsolutePath());
-		List<String> s = info.getQueryParameters().get("sessionid");
+		List<String> s = info.getQueryParameters().get(AppConstants.PARAM_SESSION_ID);
 		String [] a  =  info.getPath(true).split("/");
 		String sessionId = (s == null || s.size() < 1 ? null  : s.get(0));
 		System.out.println(info.getPath(true));
@@ -48,7 +48,7 @@ public class UpdateCenterController {
 	@Path("/{appname}" + AppConstants.CREATE_SESSION_SUB_PATH)
 	public Session getSession(@Context UriInfo info){
 		System.out.println(info.getAbsolutePath());
-		System.out.println(info.getQueryParameters().get("sessionid"));
+		System.out.println(info.getQueryParameters().get(AppConstants.PARAM_SESSION_ID));
 		System.out.println(info.getPath(true));
 		return AppUtil.getSessionRegister().getSession("-1", true);
 	}
@@ -64,7 +64,7 @@ public class UpdateCenterController {
 	@Path("/{appname}"  + AppConstants.FILE_SUB_PATH + "/{name}/")
 	public byte [] getFileByName(@Context UriInfo info){
 		System.out.println(info.getAbsolutePath());
-		List<String> s = info.getQueryParameters().get("sessionid");
+		List<String> s = info.getQueryParameters().get(AppConstants.PARAM_SESSION_ID);
 		String [] a  =  info.getPath(true).split("/");
 		String sessionId = (s == null || s.size() < 1 ? null  : s.get(0));
 		return   UpdateCenterDispatcher.dispatchFileRequest(a[1], a[a.length-1], sessionId);//VersionDescriptions.getLtfDescription().getFileByFileName(a[a.length-1]);

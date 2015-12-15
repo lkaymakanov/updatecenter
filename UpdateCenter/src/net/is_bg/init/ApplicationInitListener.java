@@ -4,13 +4,8 @@ package net.is_bg.init;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-
-
-
-
-
-import version.VersionDescriptions;
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
+import net.is_bg.controller.AppConstants.VERSION_VALIDATION_PATTERNS;
 import net.is_bg.controller.ApplicationLibFiles;
 
 
@@ -30,8 +25,11 @@ public class ApplicationInitListener implements ServletContextListener {
 		//init application lib files
 		ApplicationLibFiles.initApplicationLibFiles((String)CONTEXTPARAMS.UPDATE_CENTER_LIB_DIR.getValue());
 		
+		//read validation patterns property files
+		VERSION_VALIDATION_PATTERNS.initPropertiesByPropertyFile(CONTEXTPARAMS.UPDATE_CENTER_VALIDATION_PATTERN_PROPERTY_FILE.getValue().toString());
+		
 		//init version descriptions
-		VersionDescriptions.initDescriptions();
+		//VersionDescriptions.initDescriptions();
 		
 		System.out.println("======================= CONTEXT INITIALIZED =======================");
 	}

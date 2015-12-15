@@ -29,6 +29,29 @@ Instructions on using the update center!
 | <Environment name="versionnumberprefix" value="-1.2-" type="java.lang.String" override="false"/>					|
 |																													|
 +-------------------------------------------------------------------------------------------------------------------+
+|																													|
+| 5.Path to the validation pattern property file																	|
+| <Environment name="validationpatternpropertyfile" value="path\\to\prop" type="java.lang.String" override="false"/>|	
+|																													|
++-------------------------------------------------------------------------------------------------------------------+
+
+
+
++-------------------------------------------------------------------------------------------------------------------+
+|																													|
+|																													|
+|																													|
+|   							 		Optional parameters in the server.xml context 								|
+|																													|
+|																													|
+|																													|
++-------------------------------------------------------------------------------------------------------------------+
+|																													|
+| 6.The maximum size of each file chunk in bytes!!! 5 MByte is default!!!											|
+| <Environment name="chunksize" value="5*1024*1024" type="java.lang.Long" override="false"/>						|	
+|																													|
++-------------------------------------------------------------------------------------------------------------------+
+
 
 
 
