@@ -5,9 +5,7 @@ import com.cc.rest.client.enumerators.IREST_PATH;
 
 public class Enumerators {
 	public enum REST_PATH implements IREST_PATH{
-		TEST(AppConstants.PATH_TEST),
-		APP(AppConstants.PATH_APPLICATION),
-		LTF(AppConstants.PATH_LTF);
+		APP(AppConstants.PATH_APPLICATION);
 		
 		
 		private String path;
