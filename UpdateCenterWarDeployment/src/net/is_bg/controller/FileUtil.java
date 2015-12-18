@@ -7,16 +7,52 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 
 public final class FileUtil {
 	
+	/***
+	 * Creates a directory if not exists!!!
+	 * @param dirName
+	 */
 	public static void createDirIfNotExist(String dirName){
 		File f = new File(dirName);
-		if (!f .exists()) {
-			f.mkdir();
+		List<String> dirs = new  ArrayList<String>();
+		dirs.add(f.getAbsolutePath());
+		File parent = f.getParentFile();
+		while(parent!=null){
+			dirs.add(parent.getAbsolutePath());
+			parent = parent.getParentFile();
 		}
+		
+		//create the parent dirs if not exists!!!
+		for(int i= dirs.size()-1; i >=0 ;i--){
+			//System.out.println(dirs.get(i));
+			File ff = new File(dirs.get(i)); 
+			if(!ff.exists()) ff.mkdir();
+		}
+	}
+	
+	/***
+	 * Deletes a directory !!!
+	 */
+	public static void deleteDirectory(File directory){
+		//delete unzip directory
+		FileUtil.traverseDirs(directory, new TraverseDirsCallBack() {
+			@Override
+			public void OnReturnFromRecursion(File node) {
+				// TODO Auto-generated method stub
+				node.delete();
+			}
+			@Override
+			public void OnForward(File node) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	/***

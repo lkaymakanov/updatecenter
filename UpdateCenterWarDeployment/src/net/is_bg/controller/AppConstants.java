@@ -17,7 +17,8 @@ public class AppConstants {
 	private static final String validationpatternpropertyfile = "validationpatternpropertyfile";
 	private static final String chuncksize = "chunksize";
 	
-	public static final String CONTROLLER_PACKAGE = "net.is_bg.controller";           //the package that contains controllers
+	
+	public static final String WEB_INF_LIBS = "WEB-INF\\lib";
 	/**
 	   Samples 
 	   <Environment name="serverlibdir" value="D:\\updatecenterroot\\libs" type="java.lang.String" override="false"/>

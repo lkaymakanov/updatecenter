@@ -74,7 +74,7 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 		//dir names 
 		unzippedFolder =  wNameWithouExt + "_unzipped";
 		serverLibDir = (String)CONTEXTPARAMS.UPDATE_CENTER_LIB_DIR.getValue();
-		ltfNolibWar =  wNameWithouExt + "nolib";
+		ltfNolibWar =  wNameWithouExt + "_nolib";
 		
 		 //absolute paths to dirs & files
 		unzippedFolderPath = this.root + File.separator +  unzippedFolder;
