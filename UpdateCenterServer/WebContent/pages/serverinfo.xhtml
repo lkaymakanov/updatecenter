@@ -7,15 +7,56 @@
 	xmlns:rich="http://richfaces.org/rich">
 	
 
-	
 
 <ui:composition>
+<style>
+.rich-tabpanel-content {background-color: transparent; border: none;}
+</style>
+<a4j:keepAlive beanName="manageVersionBean"></a4j:keepAlive>
 <body style="background-image:url('#{facesContext.externalContext.requestContextPath}/images/matrix_background.png');">
 <h:form>
 	<rich:tabPanel>
-		<rich:tab label="Applications">Applications</rich:tab>
-		<rich:tab label="Sessions">Sessions</rich:tab>
-		<rich:tab label="Libraries">Libraries</rich:tab>
+		<rich:tab label="Applications">
+			
+				<table style="font-size: 12px; border-collapse:collapse; background-color:green; font-weight: bolder; color: white;"  border="3">
+						<thead>
+							<tr>
+								
+								<td>Destination</td>
+								<td>FileName</td>
+								<td>Version</td>
+								<td>Chunks</td>
+								<td>CRC32</td>
+								<td>Pattern</td>
+							
+							</tr>
+						</thead>
+						<a4j:repeat value="#{manageVersionBean.versionDescriptions}" var="desc">
+								<tr>
+									<td>#{desc.fileDestination}</td>
+									<td>#{desc.versionInfo.fileName}</td>
+									<td>#{desc.versionNumber}</td>
+									<td>#{desc.versionInfo.chunksNumber}</td>
+									<td>#{desc.versionInfo.crc32}</td>
+									<td>#{desc.fileNamePattern}</td>
+								</tr>
+								
+						</a4j:repeat>
+				</table>
+				<div style="height: 30px;"></div>
+		
+		</rich:tab>
+		<rich:tab label="Sessions">
+				<table>
+					<thead><tr><td>Sessions</td></tr></thead> 
+					<a4j:repeat value="#{manageVersionBean.sessions}" var="item">
+						<tr>
+							<td>#{item}</td>
+						</tr>
+					</a4j:repeat>
+				</table>
+		</rich:tab>
+		<rich:tab label="Libraries">#{manageVersionBean.libs}</rich:tab>
 		<rich:tab label="Connected Clients">Connected Clients</rich:tab>
 		<rich:tab label="Manage version">Connected Clients</rich:tab>
 	</rich:tabPanel>
