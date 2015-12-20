@@ -155,12 +155,12 @@ public class VersionUpdater {
 		
 		
 		//save received buffers to a file at the client side...
-		String zipVersionFile = CONTEXTPARAMS.DOWNLOAD_ROOT_DIR.getValue() + File.separator +  v.fileName +"nolib";
+		String zipVersionFile = CONTEXTPARAMS.DOWNLOAD_ROOT_DIR.getValue() + File.separator +  v.getFileName() +"nolib";
 		File res = new File(zipVersionFile);
 		OutputStream os = new FileOutputStream(res);
 		int i = 0;
 		ByteChunk b = new ByteChunk();
-		while(i < v.chunksNumber){
+		while(i < v.getChunksNumber()){
 		    b.buffer = (byte []) getFileByFileName(String.valueOf(i), currentSessionId);
 			System.out.println("Byte Chunk number " +  i + " with size " + b.size + " Bytes received successfuly" );
 			os.write(b.buffer, 0, b.size);
@@ -213,7 +213,7 @@ public class VersionUpdater {
 		for(String s : subFilesAndFolders){
 			f.add(new File(unzipDir + File.separator + s) );
 		}
-		String downloadedVersionFile = CONTEXTPARAMS.DOWNLOAD_ROOT_DIR.getValue() + File.separator + v.fileName;
+		String downloadedVersionFile = CONTEXTPARAMS.DOWNLOAD_ROOT_DIR.getValue() + File.separator + v.getFileName();
 		Packager.packZip(new File(downloadedVersionFile), f);
 		
 			
@@ -223,8 +223,8 @@ public class VersionUpdater {
 		
 		//calculate the crc 32 of  the received file & compare it to received crc 32 hash of the version info
 		long receivedFileCrc32 = Crc.checksumZip(downloadedVersionFile);
-		System.out.println("Original " + v.fileName + " crc32 is " + v.crc32);
-		System.out.println("Received " + v.fileName + " crc32 is " + receivedFileCrc32);
+		System.out.println("Original " + v.getFileName() + " crc32 is " + v.crc32);
+		System.out.println("Received " + v.getFileName() + " crc32 is " + receivedFileCrc32);
 		
 	}
 	
