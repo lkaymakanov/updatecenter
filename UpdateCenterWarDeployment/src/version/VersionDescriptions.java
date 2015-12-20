@@ -1,6 +1,7 @@
 package version;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +56,11 @@ public class VersionDescriptions {
 		}
 	}
 	
-	public static Collection<WarVersionDescription> getDescriptions(){
-		return verNameDescMap.values();
+	public static List<WarVersionDescription> getDescriptions(){
+		List<WarVersionDescription> l = new ArrayList<WarVersionDescription>();
+		for(WarVersionDescription e: verNameDescMap.values()) {l.add(e);}
+		return l;
+		
 	}
 	
 	/***

@@ -92,6 +92,7 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 		this.verValidator = new VersionValidator(version, pattern);
 		verValidator.validate();
 		versionInfo.fileName = version;
+		fileNamePattern = pattern;
 		version = version.substring(prefixLength, version.lastIndexOf("."));
 		versionNumber = Long.valueOf(version);
 		verValidator.setVersionNumber(versionNumber);
