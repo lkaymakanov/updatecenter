@@ -51,4 +51,26 @@ public class VersionInfo implements Serializable{
 		// TODO Auto-generated method stub
 		return super.hashCode();
 	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public long getNumber() {
+		return number;
+	}
+
+	public long getChunksNumber() {
+		return chunksNumber;
+	}
+
+	public long getCrc32() {
+		return crc32;
+	}
+
+	public List<String> getLibs() {
+		return libs;
+	}
+	
+	
 }
