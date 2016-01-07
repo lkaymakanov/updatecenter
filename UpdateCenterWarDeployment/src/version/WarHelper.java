@@ -3,8 +3,8 @@ package version;
 import java.io.File;
 import java.util.Set;
 
-import net.is_bg.controller.FileUtil;
-import net.is_bg.controller.TraverseDirsCallBack;
+import net.is_bg.updatercenter.common.FileUtil;
+import net.is_bg.updatercenter.common.TraverseDirsCallBack;
 import net.is_bg.updatercenter.common.zippack.Packager;
 
 public class WarHelper {

@@ -1,5 +1,7 @@
 package net.is_bg.session;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -14,16 +16,17 @@ public class SessionRegister {
 
 	private  int MAX_SESSIONS = 30;
 	private  long TIME_OUT = 120*1000; //two minute session time out
-	private  Map<String, SessionEx> currentSessions = new ConcurrentHashMap<String, SessionEx>();
+	private  Map<String, Session> currentSessions = new ConcurrentHashMap<String, Session>();
 	
 	private SessionRegister(int maxSessions, long sessionTimeout){
 		this.MAX_SESSIONS = maxSessions;
 		this.TIME_OUT = sessionTimeout;
 	}
 	
-	private  Session createSession() {
+	private  Session createSession(String ipAddress) {
 		synchronized (this) {
 			SessionEx session = new SessionEx();
+			session.setIpAddress(ipAddress);
 			session.setSessionId(UUID.randomUUID().toString());
 			if (currentSessions.size() <= MAX_SESSIONS) {
 				session.setStatus(SESSION_STATUS.ACTIVE);
@@ -37,10 +40,10 @@ public class SessionRegister {
 		}
 	}
 	
-	public  Session getSession(String sessionId, boolean create){
+	public  Session getSession(String sessionId, boolean create, String ipAddress){
 		synchronized (this){
-			SessionEx s =  currentSessions.get(sessionId);
-			if(s == null && create) return createSession();
+			SessionEx s =  (SessionEx)currentSessions.get(sessionId);
+			if(s == null && create) return createSession(ipAddress);
 			if(s!=null) s.setLastAccesTime(System.currentTimeMillis());
 			return s;
 		}
@@ -58,7 +61,7 @@ public class SessionRegister {
 	
 	public void invalidate(String sessionId){
 		synchronized (this){
-			SessionEx s =  currentSessions.get(sessionId);
+			Session s =  currentSessions.get(sessionId);
 			if(s == null) return;
 			long now = System.currentTimeMillis();
 			if(now - s.getLastAccesTime() >= TIME_OUT) {
@@ -74,6 +77,24 @@ public class SessionRegister {
 			return currentSessions.keySet();
 		}
 	}
+	
+	
+	public  List<Session> getSessions(){
+		List<Session> s = new  ArrayList<Session>();
+		synchronized (this){
+			for(Session ss : currentSessions.values()){
+				Session sss =new  Session();
+				sss.setIpAddress(ss.getIpAddress());
+				sss.setSessionId(ss.getSessionId());
+				s.add(sss);
+			}
+		}
+		return s;
+	}
+	
+	
+	
+	
 	
 	/**
 	 * Create a session register with maxSession count, the session time out !!! 
@@ -101,7 +122,7 @@ public class SessionRegister {
 	
 	public static  void main(String [] arg){
 		for(int i =0 ; i< 120; i++){
-			AppUtil.getSessionRegister().getSession("-1", true);
+			AppUtil.getSessionRegister().getSession("-1", true, "");
 		}
 	}
 	

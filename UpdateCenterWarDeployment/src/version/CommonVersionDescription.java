@@ -7,7 +7,7 @@ public class CommonVersionDescription {
 	protected String fileDestination;
 	protected String fileNamePattern; 
 	protected VersionInfo versionInfo;
-	
+	protected WAR_FILE_STATUS status = WAR_FILE_STATUS.NEW_WAR;
 	
 	public String getFileDestination() {
 		return fileDestination;
@@ -17,6 +17,13 @@ public class CommonVersionDescription {
 	}
 	public VersionInfo getVersionInfo() {
 		return versionInfo;
+	}
+	public void setStatus(WAR_FILE_STATUS status){
+		this.status = status;
+	}
+
+	public WAR_FILE_STATUS getStatus() {
+		return status;
 	}
 	
 }

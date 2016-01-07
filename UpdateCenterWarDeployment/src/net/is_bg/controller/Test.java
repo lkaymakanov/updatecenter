@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.is_bg.updatercenter.common.FileUtil;
 import net.is_bg.updatercenter.common.zippack.Packager;
 
 

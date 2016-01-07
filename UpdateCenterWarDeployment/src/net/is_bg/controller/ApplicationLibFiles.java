@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
+import net.is_bg.updatercenter.common.FileUtil;
+import net.is_bg.updatercenter.common.TraverseDirsCallBack;
 
 /***
  * Represents the directory on the update server containing the necessary libraries for all the applications that require update!!!

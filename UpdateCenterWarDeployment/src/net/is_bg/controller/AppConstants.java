@@ -2,9 +2,14 @@ package net.is_bg.controller;
 
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
+import net.is_bg.updatercenter.common.FileUtil;
 import net.is_bg.updatercenter.common.context.ContextUtils;
 
 public class AppConstants {
@@ -73,24 +78,69 @@ public class AppConstants {
 	 *
 	 */
 	public enum VERSION_VALIDATION_PATTERNS{
-		PATTERNS,
-		VERSION_VALIDATION_PATTERNS(){};
+		PATTERNS;
+		private VERSION_VALIDATION_PATTERNS(){};
 		
 		private List<String> patterns = new  ArrayList<String>();
+		private static Properties prop;
 		
 		public static void initPropertiesByPropertyFile(String propFile){
-			Properties prop =  FileUtil.loadProperties(propFile);
-			List<String> p = new  ArrayList<String>();
-			
-			for(Object o : prop.values()){
-				p.add(o.toString());
+			synchronized (VERSION_VALIDATION_PATTERNS.class) {
+				prop =  FileUtil.loadProperties(propFile);
+				List<String> p = new  ArrayList<String>();
+				
+				for(Object o : prop.values()){
+					p.add(o.toString());
+				}
+				
+				PATTERNS.patterns = p;
 			}
-			
-			PATTERNS.patterns = p;
 		}
+		
+		/***
+		 * Saves the pattern to property file!!!
+		 * @param pattern
+		 */
+		public static void savePattern(String  pattern, String propFile){
+			synchronized (VERSION_VALIDATION_PATTERNS.class) {
+				prop.put(String.valueOf(new Date().getTime()), pattern);
+				FileUtil.saveProperties(prop, propFile);
+			}
+		}
+		
+		/**
+		 * Delete property from property file!!!
+		 * @param propetyKey
+		 * @param propFile
+		 */
+		public static void deletePattern(String propetyKey, String propFile){
+			synchronized (VERSION_VALIDATION_PATTERNS.class) {
+				prop.remove(propetyKey);
+				FileUtil.saveProperties(prop, propFile);
+			}
+		}
+		
+		/**
+		 * Returns patterns!!!
+		 * @return
+		 */
 		public List<String> getPatterns() {
 			return patterns;
 		}
+		
+		
+		public static Map<Object, Object> getProperties(){
+			Map<Object, Object> m = new  Hashtable<Object, Object>();
+			synchronized (prop) {
+				Set<Object> keys =  prop.keySet();
+				for(Object key: keys){
+					m.put(key, prop.get(key));
+				}
+			}
+			return m;
+		}
+		
+		
 	}
 		
 	

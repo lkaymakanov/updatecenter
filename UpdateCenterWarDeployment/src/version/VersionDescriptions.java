@@ -2,13 +2,12 @@ package version;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
-import net.is_bg.controller.AppConstants.VERSION_VALIDATION_PATTERNS;
+import net.is_bg.updatercenter.common.FileUtil;
 
 
 /**
@@ -23,44 +22,42 @@ public class VersionDescriptions {
 	 */
 	public static Map<String, WarVersionDescription> verNameDescMap = new ConcurrentHashMap<String, WarVersionDescription>();
 	
-	
-	
 	/**
 	 * Creates descriptions for all war files that are located in the VERSIONS_ROOT_DIR & match VERSION_VALIDATION_PATTERNS!!!!
 	 */
-	public static void initDescriptions() {
+	public static void initDescriptions(IModalDailogProvider modalDiaDailogProvider) {
 		String versionDir = (String)CONTEXTPARAMS.UPDATE_CENTER_VERSIONS_DIR.getValue();
 		//read version folder & get war files
 		File verDir = new  File(versionDir);
 		if(!verDir.isDirectory()) return;
-		String verNumberPrefix = (String)CONTEXTPARAMS.UPDATE_CENTER_VERSION_NUMBER_PREFIX.getValue();
-		
-		for(String f : verDir.list()){
-			File child = new File(f);
-			if(child.isDirectory()) continue;
-			
-			List<String> patterns =  VERSION_VALIDATION_PATTERNS.PATTERNS.getPatterns();
-			
-			for(String pt : patterns){
-				if(matchVersionPattern(child.getName(), pt)){
-					String prefix = child.getName().split(verNumberPrefix)[0];
-					try{
-						addWarVersionDescription(child.getName(),   new WarVersionDescriptionEx(versionDir, 
-								child.getName(), pt, (Integer)CONTEXTPARAMS.UPDATE_CENTER_CHUNK_SIZE.getValue(), prefix.length() + verNumberPrefix.length(), true) );
-					}catch(Exception ex){
-						continue;
-					}
-				}
-				
-			}
-		}
+		String [] files = verDir.list();
+		for(String f : files){  initDescription(f, modalDiaDailogProvider); }
 	}
 	
+	/***
+	 * Init a description by file Name! Deploys a war file and adds it to verNameDescMap!
+	 * @param f
+	 */
+	public static void initDescription(String f, IModalDailogProvider modalDiaDailogProvider){
+		File child = new File(f);
+		if(child.isDirectory() || !f.toLowerCase().endsWith(".war")) return;
+		String versionDir = (String)CONTEXTPARAMS.UPDATE_CENTER_VERSIONS_DIR.getValue();
+		String verNumberPrefix = (String)CONTEXTPARAMS.UPDATE_CENTER_VERSION_NUMBER_PREFIX.getValue();
+		
+		String prefix = child.getName().split(verNumberPrefix)[0];
+		WarVersionDescriptionEx	d = new WarVersionDescriptionEx(versionDir,
+				child.getName(),  (Integer)CONTEXTPARAMS.UPDATE_CENTER_CHUNK_SIZE.getValue(), prefix.length() + verNumberPrefix.length(), true, modalDiaDailogProvider);
+		addWarVersionDescription(FileUtil.removeFileExtension(child.getName()),   d);
+	}
+	
+	/***
+	 * Get the getDescriptions of versions !!!
+	 * @return
+	 */
 	public static List<WarVersionDescription> getDescriptions(){
 		List<WarVersionDescription> l = new ArrayList<WarVersionDescription>();
 		for(WarVersionDescription e: verNameDescMap.values()) {l.add(e);}
 		return l;
-		
 	}
 	
 	/***
@@ -80,25 +77,15 @@ public class VersionDescriptions {
 	 */
 	public static void addWarVersionDescription(String versionName, WarVersionDescription description){
 		verNameDescMap.put(versionName, description);
+		WarVersionLocks.addLockifNotExist(versionName);
+	}
+
+	public static void removeVersionDescription(String fileName) {
+		// TODO Auto-generated method stub
+		verNameDescMap.remove(fileName);
+		WarVersionLocks.removeLock(fileName);
 	}
 	
-	/***
-	 * Matches a version file name against the pattern!!!
-	 * @param fileName
-	 * @param pattern
-	 * @return
-	 */
-	private static boolean  matchVersionPattern(String fileName, String pattern){
-		boolean validPattern = false;
-		VersionValidator v = null;
-		try{
-			v = new VersionValidator(fileName, pattern);
-			validPattern = v.validate();
-		}catch(Exception e){
-			validPattern = false;
-		}
-		
-		return validPattern;
-	}
+	
 	
 }
