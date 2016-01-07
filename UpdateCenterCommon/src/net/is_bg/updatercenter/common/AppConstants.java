@@ -14,6 +14,7 @@ public class AppConstants {
 	public final static String LIBS_SUB_PATH = "/libs";
 	
 	public final static String PARAM_SESSION_ID = "sessionid";
+	public static final String VERSIONS_PATH = "/versions";
 	
 	
 }

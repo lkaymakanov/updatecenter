@@ -62,6 +62,12 @@ public class Enumerators {
 		return p;
 	}
 	
+	public static IREST_PATH getVersionNamesSubPath(){
+		SELECTIVE_PATHS p = new  SELECTIVE_PATHS();
+		p.setPath(AppConstants.VERSIONS_PATH);
+		return p;
+	}
+	
 	public static IREST_PATH getSessionsSubPath(){
 		SELECTIVE_PATHS p = new  SELECTIVE_PATHS();
 		p.setPath(AppConstants.SESSIONS_SUB_PATH + "/");

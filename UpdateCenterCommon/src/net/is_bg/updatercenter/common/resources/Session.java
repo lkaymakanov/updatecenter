@@ -6,6 +6,7 @@ public class Session {
 	private String sessionId;
 	private long createTime;
 	private long lastAccesTime;
+	private String ipAddress;
 	private SESSION_STATUS status;
 	
 	public Session(){
@@ -43,6 +44,14 @@ public class Session {
 
 	protected void setLastAccesTime(long lastAccesTime) {
 		this.lastAccesTime = lastAccesTime;
+	}
+
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 
 }
