@@ -2,6 +2,9 @@ package update.center.controllers;
 
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -12,10 +15,13 @@ import javax.ws.rs.core.UriInfo;
 import net.is_bg.controller.AppUtil;
 import net.is_bg.controller.UpdateCenterDispatcher;
 import net.is_bg.updatercenter.common.AppConstants;
+import net.is_bg.updatercenter.common.FileData;
+import net.is_bg.updatercenter.common.RequestParams;
 import net.is_bg.updatercenter.common.resources.Session;
 import net.is_bg.updatercenter.common.resources.VersionInfo;
 import version.CommonVersionDescription;
 import version.VersionDescriptions;
+import version.WAR_FILE_STATUS;
 
 @Path(AppConstants.PATH_APPLICATION)
 public class UpdateCenterController {
@@ -48,11 +54,15 @@ public class UpdateCenterController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{appname}" + AppConstants.CREATE_SESSION_SUB_PATH)
-	public Session getSession(@Context UriInfo info){
-		/*System.out.println(info.getAbsolutePath());
-		System.out.println(info.getQueryParameters().get(AppConstants.PARAM_SESSION_ID));
-		System.out.println(info.getPath(true));*/
-		return controller.getSession(null);
+	public Session getSession(@Context HttpServletRequest req) {
+	    String remoteHost = req.getRemoteHost();
+	    String remoteAddr = req.getRemoteAddr();
+	    int remotePort = req.getRemotePort();
+	    String msg = remoteHost + " (" + remoteAddr + ":" + remotePort + ")";
+	    System.out.println(msg);
+	    RequestParams p = new RequestParams();
+	    p.ipAddress = remoteAddr;
+		return controller.getSession(p);
 	}
 	
 
@@ -64,7 +74,7 @@ public class UpdateCenterController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{appname}"  + AppConstants.FILE_SUB_PATH + "/{name}/")
-	public byte [] getFileByName(@Context UriInfo info){
+	public FileData getFileByName(@Context UriInfo info){
 		System.out.println(info.getAbsolutePath());
 		List<String> s = info.getQueryParameters().get(AppConstants.PARAM_SESSION_ID);
 		String [] a  =  info.getPath(true).split("/");
@@ -94,8 +104,21 @@ public class UpdateCenterController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(AppConstants.SESSIONS_SUB_PATH)
 	public Set<String> getSessions(@Context UriInfo info){
-		return controller.getSessions();
+		return controller.getSessionsIds();
 		
+	}
+	
+	
+	/**
+	 * Returns the id's of the active sessions!!!!
+	 * @param info
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path(AppConstants.VERSIONS_PATH)
+	public Set<String> getVersionNames(@Context UriInfo info){
+		return controller.getVersionNames();
 	}
 	
 	
@@ -111,9 +134,16 @@ public class UpdateCenterController {
 		return controller.getLibraries();
 	}
 	
+	
+	/***
+	 * The controller implementation !!!
+	 * @return
+	 */
 	public static final IUpdateCenterController getIUpdateCenterController(){
 		return controller;
 	}
+	
+	
 	
 	private static final IUpdateCenterController controller = new IUpdateCenterController() {
 		
@@ -124,7 +154,7 @@ public class UpdateCenterController {
 		}
 		
 		@Override
-		public Set<String> getSessions() {
+		public Set<String> getSessionsIds() {
 			// TODO Auto-generated method stub
 			return AppUtil.getSessionRegister().getSessionIds();
 		}
@@ -132,7 +162,7 @@ public class UpdateCenterController {
 		@Override
 		public Session getSession(RequestParams params) {
 			// TODO Auto-generated method stub
-			return AppUtil.getSessionRegister().getSession("-1", true);
+			return AppUtil.getSessionRegister().getSession("-1", true, params.ipAddress);
 		}
 		
 		@Override
@@ -142,7 +172,7 @@ public class UpdateCenterController {
 		}
 		
 		@Override
-		public byte[] getFileByName(RequestParams params) {
+		public FileData getFileByName(RequestParams params) {
 			// TODO Auto-generated method stub
 			return   UpdateCenterDispatcher.dispatchFileRequest(params.appTobeUpdated, params.fileName, params.sessionId); 
 		}
@@ -152,9 +182,25 @@ public class UpdateCenterController {
 			// TODO Auto-generated method stub
 			String s = "";
 			for(CommonVersionDescription v : VersionDescriptions.getDescriptions()){
-				s+=v.getVersionInfo() + "\n";
+				if(WAR_FILE_STATUS.PUBLISHED == v.getStatus()) s+=v.getVersionInfo() + "\n";
 			}
 			return s;
+		}
+		
+		@Override
+		public Set<String> getVersionNames() {
+			// TODO Auto-generated method stub
+			Set<String> s = new  TreeSet<String>();
+			for(CommonVersionDescription v : VersionDescriptions.getDescriptions()){
+				if(WAR_FILE_STATUS.PUBLISHED == v.getStatus()) s.add(v.getVersionInfo().fileName);
+			}
+			return s;
+		}
+
+		@Override
+		public List<Session> getSessionsInfo() {
+			// TODO Auto-generated method stub
+			return AppUtil.getSessionRegister().getSessions();
 		}
 	};
 	

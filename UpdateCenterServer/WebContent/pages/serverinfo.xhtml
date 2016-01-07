@@ -5,62 +5,140 @@
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
+<head>
 	
+</head>
 
 
 <ui:composition>
+		<script type="text/javascript" src="../scripts/common.js"></script>
 <style>
 .rich-tabpanel-content {background-color: transparent; border: none;}
+.rich-fileupload-list-decor{ border: none; }
 </style>
 <a4j:keepAlive beanName="manageVersionBean"></a4j:keepAlive>
-<body style="background-image:url('#{facesContext.externalContext.requestContextPath}/images/matrix_background.png');">
+<body onload="errMsg();" style="background-image:url('#{facesContext.externalContext.requestContextPath}/images/matrix_background.jpg');">
 <h:form>
 	<rich:tabPanel>
-		<rich:tab label="Applications">
-			
-				<table style="font-size: 12px; border-collapse:collapse; background-color:green; font-weight: bolder; color: white;"  border="3">
+		<rich:tab label="Manage versions">
+			<rich:panel id="managerversions" >
+				<f:facet name="header"><h:outputText value="Manage versions"/></f:facet>
+				<h3>Versions</h3>
+				<table class="rich-table" style="font-size: 12px;"  border="1">
 						<thead>
-							<tr>
-								
-								<td>Destination</td>
-								<td>FileName</td>
-								<td>Version</td>
-								<td>Chunks</td>
-								<td>CRC32</td>
-								<td>Pattern</td>
-							
+							<tr class="rich-table-header"  >
+								<td class="rich-table-headercell">Destination</td>
+								<td class="rich-table-headercell">FileName</td>
+								<td class="rich-table-headercell">Version</td>
+								<td class="rich-table-headercell">Chunks</td>
+								<td class="rich-table-headercell">CRC32</td>
+								<td class="rich-table-headercell">Pattern</td>
+								<td class="rich-table-headercell">Status</td>
+								<td class="rich-table-headercell">Manage</td>
 							</tr>
 						</thead>
 						<a4j:repeat value="#{manageVersionBean.versionDescriptions}" var="desc">
-								<tr>
-									<td>#{desc.fileDestination}</td>
-									<td>#{desc.versionInfo.fileName}</td>
-									<td>#{desc.versionNumber}</td>
-									<td>#{desc.versionInfo.chunksNumber}</td>
-									<td>#{desc.versionInfo.crc32}</td>
-									<td>#{desc.fileNamePattern}</td>
+								<tr class="rich-table-row rich-table-firstrow ">
+									<td class="rich-table-cell">#{desc.fileDestination}</td>
+									<td class="rich-table-cell">#{desc.versionInfo.fileName}</td>
+									<td class="rich-table-cell">#{desc.versionNumber}</td>
+									<td class="rich-table-cell">#{desc.versionInfo.chunksNumber}</td>
+									<td class="rich-table-cell">#{desc.versionInfo.crc32}</td>
+									<td class="rich-table-cell">#{desc.fileNamePattern}</td>
+									<td style="color:green; font-size:15px; font-weight:bold;" class="rich-table-cell">#{desc.status}</td>
+									<td class="rich-table-cell">
+										<h:commandButton value="Deploy" action="#{desc.deploy}" disabled="#{!desc.deployable}" />
+										<h:commandButton value="Publish" action="#{desc.publish}" disabled="#{!desc.publishable}" />
+										<h:commandButton value="Stop Publish" action="#{desc.stoppublish}" disabled="#{!desc.stoppublishable}" />
+										<h:commandButton value="Detete" action="#{desc.delete}" disabled="#{!desc.deletable}" />
+									</td>
 								</tr>
-								
 						</a4j:repeat>
 				</table>
-				<div style="height: 30px;"></div>
-		
+				<div style="height: 20px;"></div>
+				<h3>Upload New Version</h3>
+				<rich:fileUpload autoclear="true"  fileUploadListener="#{manageVersionBean.fileBean.listener}" id="upload" acceptedTypes="war"  listHeight="60px"
+            		ontyperejected="alert('Only WAR files are accepted');" maxFilesQuantity="1" addControlLabel="Upload WAR File" > 
+            		<a4j:support event="onclear" actionListener="#{manageVersionBean.fileBean.clearFile}" reRender="managerversions"/>
+       			 </rich:fileUpload>
+       			</rich:panel>
 		</rich:tab>
-		<rich:tab label="Sessions">
-				<table>
-					<thead><tr><td>Sessions</td></tr></thead> 
-					<a4j:repeat value="#{manageVersionBean.sessions}" var="item">
-						<tr>
-							<td>#{item}</td>
-						</tr>
-					</a4j:repeat>
-				</table>
+		<rich:tab label="Connected Clients">
+			<rich:dataTable value="#{manageVersionBean.sessionInfo}" var="item">
+			 <f:facet name="header">
+           		<rich:columnGroup>
+           			<rich:column>
+							<h:outputText value="Session" />
+					</rich:column>
+					<rich:column>
+							<h:outputText value="Ip Address" />
+					</rich:column>
+           		</rich:columnGroup>
+           	</f:facet>			
+			<rich:column>
+				<h:outputText value="#{item.sessionId}"/>
+			</rich:column>
+			<rich:column>
+				<h:outputText value="#{item.ipAddress}"/>
+			</rich:column>
+			</rich:dataTable>
 		</rich:tab>
-		<rich:tab label="Libraries">#{manageVersionBean.libs}</rich:tab>
-		<rich:tab label="Connected Clients">Connected Clients</rich:tab>
-		<rich:tab label="Manage version">Connected Clients</rich:tab>
+		<rich:tab label="Libraries in Update Center">
+			<rich:dataTable value="#{manageVersionBean.libs}" var="item">
+				 <f:facet name="header">
+            		<rich:columnGroup>
+            			<rich:column>
+								<h:outputText value="Libraries" />
+						</rich:column>
+            		</rich:columnGroup>
+            	</f:facet>			
+				<rich:column>
+					<h:outputText value="#{item}"/>
+				</rich:column>
+			</rich:dataTable>
+		</rich:tab>
+		<rich:tab label="Manage Patterns">
+			<rich:panel>
+				<f:facet name="header"><h:outputText value="Manage Patterns"/></f:facet>
+					<h:panelGrid columns="3">
+				 		<h:outputText value="Pattern:" />
+				 		<h:inputText style="width:600px;" value="#{manageVersionBean.pattern}" />
+				 		<h:commandButton value="Save" action="#{manageVersionBean.savePattern}"></h:commandButton>
+				 	</h:panelGrid>
+				 	
+				<rich:dataTable value="#{manageVersionBean.patterns}" var="item">
+				 <f:facet name="header">
+            		<rich:columnGroup>
+            			<rich:column>
+								<h:outputText value="KEY" />
+						</rich:column>
+						<rich:column>
+								<h:outputText value="VALUE" />
+						</rich:column>
+						<rich:column>
+								<h:outputText value="DELETE" />
+						</rich:column>
+            		</rich:columnGroup>
+            	</f:facet>			
+				<rich:column>
+					<h:outputText value="#{item.key}"/>
+				</rich:column>
+				<rich:column>
+					<h:outputText value="#{item.pattern}"/>
+				</rich:column>
+				<rich:column>
+					<h:commandButton value="Delete" action="#{item.deletePattern}"></h:commandButton>
+				</rich:column>
+			</rich:dataTable>
+			</rich:panel>
+		</rich:tab>
 	</rich:tabPanel>
 </h:form>
+
+<ui:include src="/pages/msgModal.xhtml" >
+	<ui:param name="xBean" value="#{manageVersionBean}" />
+</ui:include>
+
 </body>
 </ui:composition>
 </html>

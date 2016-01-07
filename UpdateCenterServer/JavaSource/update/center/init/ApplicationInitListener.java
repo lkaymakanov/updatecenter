@@ -1,15 +1,27 @@
 package update.center.init;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.WatchEvent;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import update.center.controllers.AppUtil;
+import version.EventInfo;
+import version.IElementProcessor;
 import version.VersionDescriptions;
+import version.VersionFolderManager;
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
 import net.is_bg.controller.AppConstants.VERSION_VALIDATION_PATTERNS;
 import net.is_bg.controller.ApplicationLibFiles;
+import net.is_bg.controller.FileChangeObserver;
+import net.is_bg.controller.FileChangeWatcher;
 
 public class ApplicationInitListener implements ServletContextListener{
 
+	static VersionFolderManager<EventInfo> foldermanager;
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		// TODO Auto-generated method stub
@@ -24,8 +36,37 @@ public class ApplicationInitListener implements ServletContextListener{
 		VERSION_VALIDATION_PATTERNS.initPropertiesByPropertyFile(CONTEXTPARAMS.UPDATE_CENTER_VALIDATION_PATTERN_PROPERTY_FILE.getValue().toString());
 		
 		//init version descriptions
-		VersionDescriptions.initDescriptions();
-				
+		VersionDescriptions.initDescriptions(AppUtil.getProvider());
+		
+		
+		foldermanager = new VersionFolderManager<EventInfo>(new IElementProcessor<EventInfo>(){
+			@Override
+			public void process(EventInfo element) {
+				// TODO Auto-generated method stub
+				System.out.println(new File(CONTEXTPARAMS.UPDATE_CENTER_VERSIONS_DIR.getValue() + File.separator + element.getEvent().context()).lastModified());
+				System.out.println("Entered in process EventInfo  " + element);
+			}
+			
+		});
+		
+		//start file update server version directory listener!!! 
+		FileChangeWatcher fc;
+		try {
+			fc = FileChangeWatcher.getInstance();
+			fc.registerListener((String)CONTEXTPARAMS.UPDATE_CENTER_VERSIONS_DIR.getValue());
+			fc.addObserver(new FileChangeObserver<WatchEvent<Path>>() {
+				@Override
+				public void update(WatchEvent<Path> event) {
+					// TODO Auto-generated method stub
+					ApplicationInitListener.foldermanager.addElement(new EventInfo(event));
+				}
+			});
+			fc.startMonitoringLoop();
+		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		System.out.println("===================================== UpdateCenterServer context initialized =========================================");
 	}

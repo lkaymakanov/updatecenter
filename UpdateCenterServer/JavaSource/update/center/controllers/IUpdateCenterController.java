@@ -1,7 +1,10 @@
 package update.center.controllers;
 
+import java.util.List;
 import java.util.Set;
 
+import net.is_bg.updatercenter.common.FileData;
+import net.is_bg.updatercenter.common.RequestParams;
 import net.is_bg.updatercenter.common.resources.Session;
 import net.is_bg.updatercenter.common.resources.VersionInfo;
 
@@ -27,10 +30,10 @@ public interface IUpdateCenterController {
 	 * @param info
 	 * @return
 	 */
-	public byte [] getFileByName(RequestParams params);
+	public FileData getFileByName(RequestParams params);
 	
 	/***
-	 * Gets the names of the available applications for update!!!
+	 * Gets the names of the available applications for update + Extra information about the files!!!
 	 * @return
 	 */
 	public String getAvailableUpdates();
@@ -40,7 +43,7 @@ public interface IUpdateCenterController {
 	 * @param info
 	 * @return
 	 */
-	public Set<String> getSessions();
+	public Set<String> getSessionsIds();
 	/**
 	 * Returns the set with the lib files in lib directory!!!!
 	 * @param info
@@ -48,5 +51,18 @@ public interface IUpdateCenterController {
 	 */
 	public Set<String> getLibraries();
 	
+	
+	/***
+	 * Gets the names of the available applications for update!!!
+	 * @return
+	 */
+	public Set<String>  getVersionNames();
+	
+	
+	/***
+	 * Get Session complete session info
+	 * @return
+	 */
+	public List<Session> getSessionsInfo();
 	
 }
