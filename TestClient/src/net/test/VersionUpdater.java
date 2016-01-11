@@ -1,10 +1,12 @@
 package net.test;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import net.is_bg.updatercenter.common.AppConstants;
@@ -30,7 +32,9 @@ public class VersionUpdater {
 	//names of the params that go in server xml!!!!
 	private static String downloadDir = "downloaddir"; 		  //list with comma separated jar files
 	//private static String unzipappdir = "unzipappdir";
-	private static String downloadLibDir = "downloadlibdir"; 	
+	private static String downloadLibDir = "downloadlibdir"; 
+	
+	public static final String  PATH_TO_JAR = "D:\\Projects\\github\\UpdateCenterTestClient";   //the path to the jar executable file
 	
 	private static String getCurrentfileDir(){
 		try {
@@ -82,14 +86,13 @@ public class VersionUpdater {
 		}
 	}
 	
-	private String currentSessionId = "-1";
 	private String protocol = "http";
 	private String serverIp = "localhost";
 	private String port = "8080";
 	private String context= "UpdateCenterServer";
 	private String endpoint = protocol+"://" + serverIp + ":" + port + "/" + context;
 	private String appName = "";
-	private String sessionid = "1234";
+	private String sessionid = "-1";
 	
 	/**The main path pointing to update center jersey servlet*/
 	private final static IREST_PATH MAIN_PATH = new  IREST_PATH() {
@@ -101,7 +104,7 @@ public class VersionUpdater {
 	}; 
 	
 	public VersionUpdater() throws Exception{
-		this("http", "localhost", "8080", "LTF", null);
+		this("http", "localhost", "8080", "LTF", new RequestParams());
 	}
 	
 	public VersionUpdater(String protocol, String serverIp, String port, String application, RequestParams params) throws Exception{
@@ -133,7 +136,10 @@ public class VersionUpdater {
 	
 	private Session getSession(RequestParams params) throws  Exception {
 		Session session = Requester.request().path(MAIN_PATH)
-				.subPath(Enumerators.getCreateSessionSubPath(appName))
+				.subPath(Enumerators.getCreateSessionSubPath(appName)).
+				 queryParam(PARAMS.MUNICIPALITY_ID, params.municipalityId).
+				 queryParam(PARAMS.MUNICIPALITY_NAME, params.municipalityName).
+				 queryParam(PARAMS.CURRENT_VERSION, params.currentVersion)
 				.get(MEDIA_TYPE.JSON)
 				.getResponseObject(Session.class);
 		return session;
@@ -189,7 +195,7 @@ public class VersionUpdater {
 		int i = 0;
 		ByteChunk b = new ByteChunk();
 		while(i < v.getChunksNumber()){
-		    b.buffer =  getFileByFileName(String.valueOf(i), currentSessionId);
+		    b.buffer =  getFileByFileName(String.valueOf(i), sessionid);
 		    b.size = b.buffer.length;
 			System.out.println("Byte Chunk number " +  i + " with size " + b.size + " Bytes received successfuly" );
 			os.write(b.buffer, 0, b.size);
@@ -209,7 +215,7 @@ public class VersionUpdater {
 			res = new File(CONTEXTPARAMS.DOWNLOAD_LIB_DIR.getValue() + File.separator +  s);
 			if(res.exists()){  continue; }
 		    
-			b.buffer = getFileByFileName(s, currentSessionId);
+			b.buffer = getFileByFileName(s, sessionid);
 			b.size = b.buffer.length;
 		    //save the received buffer to file in lib dir!!!
 			os = new FileOutputStream(res);
@@ -237,14 +243,13 @@ public class VersionUpdater {
 		System.out.println("Copying lib files  from " + libdir  + " to " + applicationlibPath);
 		FileUtil.copyDirectory(new File(CONTEXTPARAMS.DOWNLOAD_LIB_DIR.getValue().toString()), applib);
 		
-		//zip back into the original version war file
-		List<File> f = new ArrayList<File>();
-		String subFilesAndFolders []  = new File(unzipDir).list();
-		for(String s : subFilesAndFolders){
-			f.add(new File(unzipDir + File.separator + s) );
-		}
-		String downloadedVersionFile = versionDir + File.separator + v.getFileName();
-		Packager.packZip(new File(downloadedVersionFile), f);
+		//zip back into the original version war file using jar.exe
+		Map<String, String > p  = new  HashMap<String, String>();
+		p.put("PATH_TO_UZIPPED_APP", unzipDir);
+		p.put("Path", PATH_TO_JAR);
+		p.put("WAR_FILE", v.getFileName());
+		executeCommand(PATH_TO_JAR + File.separator  + "packwar.bat", p);
+		String downloadedVersionFile = p.get("PATH_TO_UZIPPED_APP") + File.separator + v.getFileName();
 		
 			
 		//delete the .warnolib file
@@ -252,10 +257,44 @@ public class VersionUpdater {
 		res.delete();
 		
 		//calculate the crc 32 of  the received file & compare it to received crc 32 hash of the version info
-		long receivedFileCrc32 = Crc.checksumZip(downloadedVersionFile);
+		long receivedFileCrc32 = Crc.checksumMappedFile(downloadedVersionFile);
 		System.out.println("Original " + v.getFileName() + " crc32 is " + v.crc32);
 		System.out.println("Received " + v.getFileName() + " crc32 is " + receivedFileCrc32);
 		
+		//copy the war file to the version number directory
+		System.out.println("Remove " + v.getFileName() + " from   " + unzipDir + File.separator + v.getFileName() + " to " + versionDir + File.separator + v.getFileName());
+		FileUtil.copyFile(new File(unzipDir + File.separator + v.getFileName()), new File(versionDir + File.separator + v.getFileName()));
+		
+		//delete the unzip directory
+		System.out.println("Deleting  directory  " + unzipDir);
+		FileUtil.deleteDirectory(new File(unzipDir));
+		
+	}
+	
+	
+	/***
+	 * Executes command from the command line!!!
+	 * @param cmdLineStr - the command String
+	 * @param log - the custom logger!!!
+	 * @throws IOException
+	 * @throws InterruptedException 
+	 */
+	private void executeCommand(String cmdLineStr, Map<String, String> env) throws IOException, InterruptedException{
+		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", cmdLineStr);
+		Map<String, String > pMap = builder.environment();
+		if(env!= null){
+			for(Map.Entry<String, String> entry : env.entrySet())
+			pMap.put(entry.getKey(), entry.getValue());
+		}
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while (true) {
+            line = r.readLine();
+            if (line == null) { break; }
+            System.out.println(line);
+        }
 	}
 	
 	

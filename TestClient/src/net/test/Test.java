@@ -4,6 +4,19 @@ package net.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.is_bg.updatercenter.common.RequestParams;
+
+/***
+ 
+ 
+echo %PATH_TO_UZIPPED_APP%
+cd  %PATH_TO_JAR%
+start %PATH_TO_JAR%\jar.exe -cvf   %WAR_FILE%  %PATH_TO_UZIPPED_APP%\*
+ 
+ 
+ * @author lubo
+ *
+ */
 
 public class Test {
 	
@@ -32,10 +45,11 @@ public class Test {
 		String protocol = keyVal.get("-proto")!=null ? keyVal.get("-proto") : "http";
 		String server =   keyVal.get("-s")!=null ? keyVal.get("-s") : "localhost";
 		String port =  keyVal.get("-p")!=null ? keyVal.get("-p") : "8080";
-		String application =  keyVal.get("-app")!=null ? keyVal.get("-app") : "onlinereportwsclient";
+		String application =  keyVal.get("-app")!=null ? keyVal.get("-app") : "ltf";
 		
-		VersionUpdater updater = new VersionUpdater(protocol, server, port, application, null);
+		VersionUpdater updater = new VersionUpdater(protocol, server, port, application,  new  RequestParams());
 		updater.update();
+		
 	}
 	
 }
