@@ -24,7 +24,10 @@ public class Enumerators {
 	
 	
 	public enum PARAMS implements IPARAM {
-		SESSION_ID(AppConstants.PARAM_SESSION_ID);
+		SESSION_ID(AppConstants.PARAM_SESSION_ID),
+		MUNICIPALITY_ID(AppConstants.PARAM_MUNICIPALITY_ID),
+		MUNICIPALITY_NAME(AppConstants.PARAM_MUNICIPALITY_NAME),
+		CURRENT_VERSION(AppConstants.PARAM_CURRENT_VERSION);
 		private PARAMS(String stringValue){
 			this.stringValue = stringValue;
 		}

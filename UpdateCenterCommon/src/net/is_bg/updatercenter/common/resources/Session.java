@@ -7,6 +7,11 @@ public class Session {
 	private long createTime;
 	private long lastAccesTime;
 	private String ipAddress;
+	String fileName;
+	private long municipalityId;
+	private String municipalityName;
+	public String currentVersion;
+	
 	private SESSION_STATUS status;
 	
 	public Session(){
@@ -53,5 +58,31 @@ public class Session {
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
 	}
+
+	public long getMunicipalityId() {
+		return municipalityId;
+	}
+
+	public void setMunicipalityId(long municipalityId) {
+		this.municipalityId = municipalityId;
+	}
+
+	public String getMunicipalityName() {
+		return municipalityName;
+	}
+
+	public void setMunicipalityName(String municipalityName) {
+		this.municipalityName = municipalityName;
+	}
+
+	public String getCurrentVersion() {
+		return currentVersion;
+	}
+
+	public void setCurrentVersion(String currentVersion) {
+		this.currentVersion = currentVersion;
+	}
+	
+	
 
 }
