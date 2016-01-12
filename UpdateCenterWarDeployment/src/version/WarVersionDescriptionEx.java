@@ -87,7 +87,7 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 		applicationlibPath = unzippedFolderPath + File.separator + "WEB-INF\\lib";
 		//private	String libCopyDirPath =  root + File.separator +  libCopyDir;
 	    ltfNolibWarPath = this.root  + File.separator +  ltfNolibWar;
-		libDescriptionFile = this.root  + File.separator + warfile + ".libs";
+		libDescriptionFile = this.root  + File.separator + warfile + ".libs.txt";
 		versionInfo = new  VersionInfo();
 		this.fileDestination = warfilePath;
 		int lastSlashInd = fileDestination.lastIndexOf("\\");
@@ -259,7 +259,7 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 				splitter.split();
 				versionInfo.chunksNumber = splitter.getChunksNumber();
 				versionInfo.number = versionNumber;
-				versionInfo.crc32 = Crc.checksumZip(fileDestination);
+				versionInfo.crc32 = Crc.checksumMappedFile(fileDestination);
 				
 				//now put the chunks into fname map
 				long cnumber = 0;

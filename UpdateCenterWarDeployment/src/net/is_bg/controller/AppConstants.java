@@ -20,6 +20,7 @@ public class AppConstants {
 	private static final String updatecenterroot = "updatecenterroot";                      //update center root directory
 	private static final String versionnumberprefix = "versionnumberprefix";
 	private static final String validationpatternpropertyfile = "validationpatternpropertyfile";
+	private static final String userspropertyfile = "userspropertyfile";
 	private static final String chuncksize = "chunksize";
 	
 	
@@ -38,6 +39,7 @@ public class AppConstants {
 		UPDATE_CENTER_ROOT(updatecenterroot, ContextUtils.getParam(updatecenterroot, String.class, ""), String.class),
 		UPDATE_CENTER_VERSION_NUMBER_PREFIX(versionnumberprefix, ContextUtils.getParam(versionnumberprefix, String.class, ""), String.class),
 		UPDATE_CENTER_VALIDATION_PATTERN_PROPERTY_FILE(validationpatternpropertyfile, ContextUtils.getParam(validationpatternpropertyfile, String.class, ""), String.class),
+		UPDATE_CENTER_USERS_PROPERTY_FILE(userspropertyfile, ContextUtils.getParam(userspropertyfile, String.class, ""), String.class),
 		UPDATE_CENTER_CHUNK_SIZE(chuncksize, ContextUtils.getParam(chuncksize, Integer.class, 5*1024*1024), Integer.class);
 		
 		<T> CONTEXTPARAMS(String name, T defaultValue,  Class<T> c){

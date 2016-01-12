@@ -7,9 +7,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-
-import net.is_bg.controller.AppUtil;
 import net.is_bg.updatercenter.common.Enumerators.SESSION_STATUS;
+import net.is_bg.updatercenter.common.RequestParams;
 import net.is_bg.updatercenter.common.resources.Session;
 
 public class SessionRegister {
@@ -23,10 +22,13 @@ public class SessionRegister {
 		this.TIME_OUT = sessionTimeout;
 	}
 	
-	private  Session createSession(String ipAddress) {
+	private  Session createSession(RequestParams params) {
 		synchronized (this) {
 			SessionEx session = new SessionEx();
-			session.setIpAddress(ipAddress);
+			session.setIpAddress(params.ipAddress);
+			session.setCurrentVersion(params.currentVersion);
+			session.setMunicipalityId(params.municipalityId);
+			session.setMunicipalityName(params.municipalityName);
 			session.setSessionId(UUID.randomUUID().toString());
 			if (currentSessions.size() <= MAX_SESSIONS) {
 				session.setStatus(SESSION_STATUS.ACTIVE);
@@ -40,10 +42,10 @@ public class SessionRegister {
 		}
 	}
 	
-	public  Session getSession(String sessionId, boolean create, String ipAddress){
+	public  Session getSession(RequestParams params, boolean create, String ipAddress){
 		synchronized (this){
-			SessionEx s =  (SessionEx)currentSessions.get(sessionId);
-			if(s == null && create) return createSession(ipAddress);
+			SessionEx s =  (SessionEx)currentSessions.get(params.sessionId);
+			if(s == null && create) return createSession(params);
 			if(s!=null) s.setLastAccesTime(System.currentTimeMillis());
 			return s;
 		}
@@ -84,6 +86,9 @@ public class SessionRegister {
 		synchronized (this){
 			for(Session ss : currentSessions.values()){
 				Session sss =new  Session();
+				sss.setMunicipalityId(ss.getMunicipalityId());
+				sss.setMunicipalityName(ss.getMunicipalityName());
+				sss.setCurrentVersion(ss.getCurrentVersion());
 				sss.setIpAddress(ss.getIpAddress());
 				sss.setSessionId(ss.getSessionId());
 				s.add(sss);
@@ -122,7 +127,6 @@ public class SessionRegister {
 	
 	public static  void main(String [] arg){
 		for(int i =0 ; i< 120; i++){
-			AppUtil.getSessionRegister().getSession("-1", true, "");
 		}
 	}
 	

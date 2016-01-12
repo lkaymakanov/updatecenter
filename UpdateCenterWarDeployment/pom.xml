@@ -38,24 +38,53 @@
 		<dependency>
 			<groupId>UpdateCenterCommon</groupId>
 			<artifactId>UpdateCenterCommon</artifactId>
-			<version>0.1</version>
+			<version>1.31</version>
 		</dependency>
 		<dependency>
 			<groupId>SplitMergeFile</groupId>
 			<artifactId>SplitMergeFile</artifactId>
-			<version>0.1</version>
+			<version>1.31</version>
 		</dependency>
 	</dependencies>
 	<repositories>
-  <repository>
-    <id>mdtteam-mvn-repo</id>
-    <url>https://raw.githubusercontent.com/mdtteam/maven-repo/master/</url>
-     <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-        </snapshots>
-  </repository>
-  <repository>
+ <repository>
+			<id>JBOSS</id>
+			<name>JBoss Repository</name>
+			<url> http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</repository>
+		
+		<repository>
+			<id>PUBLIC</id>
+			<name>Public Repository</name>
+			<url> http://repository.jboss.org/nexus/content/groups/public/</url>
+		</repository>
+		
+		<repository>
+			<id>STAGING</id>
+			<name>Staging Repository</name>
+			<url> http://repository.jboss.org/nexus/content/groups/staging/</url>
+		</repository>
+		
+		<repository>
+			<id>JASPER</id>
+			<name>JasperReports Repository</name>
+			<url>https://repository.jboss.org/nexus/content/groups/staging/</url>
+		</repository>
+		
+		<repository>
+           <id>ProjectRepo</id>
+           <name>ProjectRepo</name>
+           <url>file://${project.basedir}/WebContent/customlibs</url>
+        </repository>
+ 	<repository>
+	    <id>mdtteam-mvn-repo</id>
+	    <url>https://raw.githubusercontent.com/mdtteam/maven-repo/master/</url>
+	     <snapshots>
+	            <enabled>true</enabled>
+	            <updatePolicy>always</updatePolicy>
+	        </snapshots>
+  	</repository>
+  	<repository>
            <id>ProjectRepo</id>
            <name>ProjectRepo</name>
            <url>file://${project.basedir}/WebContent/customlibs</url>

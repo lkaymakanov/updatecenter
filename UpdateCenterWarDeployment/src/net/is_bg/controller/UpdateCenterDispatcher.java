@@ -2,6 +2,7 @@ package net.is_bg.controller;
 
 import version.VersionDescriptions;
 import net.is_bg.updatercenter.common.FileData;
+import net.is_bg.updatercenter.common.RequestParams;
 import net.is_bg.updatercenter.common.resources.VersionInfo;
 
 
@@ -43,6 +44,8 @@ public class UpdateCenterDispatcher {
 	 * @param sessionId
 	 */
 	private static void checkSession(String sessionId){
-		if(!AppUtil.getSessionRegister().isSessionActive(sessionId)){throw new RuntimeException(sessionId + " with sessionId is not active..."); }else{ AppUtil.getSessionRegister().getSession(sessionId, false, null); }
+		RequestParams p = new  RequestParams();
+		p.sessionId = sessionId;
+		if(!AppUtil.getSessionRegister().isSessionActive(sessionId)){throw new RuntimeException(sessionId + " with sessionId is not active..."); }else{ AppUtil.getSessionRegister().getSession(p, false, null); }
 	}
 }
