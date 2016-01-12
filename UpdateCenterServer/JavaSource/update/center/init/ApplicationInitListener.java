@@ -1,29 +1,20 @@
 package update.center.init;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.WatchEvent;
 import java.util.Properties;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import update.center.controllers.AppUtil;
-import version.EventInfo;
-import version.IElementProcessor;
-import version.VersionDescriptions;
-import version.VersionFolderManager;
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
 import net.is_bg.controller.AppConstants.VERSION_VALIDATION_PATTERNS;
 import net.is_bg.controller.ApplicationLibFiles;
-import net.is_bg.controller.FileChangeObserver;
-import net.is_bg.controller.FileChangeWatcher;
 import net.is_bg.updatercenter.common.FileUtil;
+import update.center.controllers.AppUtil;
+import version.VersionDescriptions;
 
 public class ApplicationInitListener implements ServletContextListener{
 
-	static VersionFolderManager<EventInfo> foldermanager;
+	//static VersionFolderManager<EventInfo> foldermanager;
 	
 	public static  Properties users;
 	
@@ -46,7 +37,7 @@ public class ApplicationInitListener implements ServletContextListener{
 		//load users
 		users = FileUtil.loadProperties((String)CONTEXTPARAMS.UPDATE_CENTER_USERS_PROPERTY_FILE.getValue());
 		
-		
+		/*
 		foldermanager = new VersionFolderManager<EventInfo>(new IElementProcessor<EventInfo>(){
 			@Override
 			public void process(EventInfo element) {
@@ -74,7 +65,7 @@ public class ApplicationInitListener implements ServletContextListener{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		System.out.println("===================================== UpdateCenterServer context initialized =========================================");
 	}

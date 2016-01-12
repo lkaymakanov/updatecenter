@@ -25,7 +25,6 @@ import org.richfaces.event.UploadEvent;
 import update.center.controllers.AppUtil;
 import update.center.controllers.IUpdateCenterController;
 import update.center.controllers.UpdateCenterController;
-import update.center.init.ApplicationInitListener;
 import version.ModalDialog;
 import version.VersionDescriptions;
 import version.WarVersionDescription;
@@ -59,7 +58,7 @@ public class ManageVersionBean implements Serializable{
 		public void callback(byte[] file, UploadEvent event) {
 			// TODO Auto-generated method stub
 			String fName = event.getUploadItem().getFileName();
-			
+			System.out.println("ManageVersionBean.ManageVersionBean.uploadfile ");
 			//save the file to version directory
 			ByteArrayOutputStream os  = new ByteArrayOutputStream(file.length);
 			FileOutputStream fos = null;
@@ -68,20 +67,22 @@ public class ManageVersionBean implements Serializable{
 			WarVersionLocks.addLockifNotExist(lockName);
 			SimpleLock lock = WarVersionLocks.getLock(lockName);
 			try {
-				if(!lock.lock(new Message("Uploading  file " + fileName))){
+				 if(!lock.lock(new Message("Uploading  file " + fileName))){
 					fos = new FileOutputStream(new File(fileName));
 					os.write(file);
 					
 					//add to version descriptions
 					VersionDescriptions.initDescription(fileName, AppUtil.getProvider());
-				}else{
-					throw new RuntimeException(lock.getMessage().getValue());
-				}
+				  }else{
+					  System.out.println("File " + lockName + "  is still uploading");
+					  throw new RuntimeException(lock.getMessage().getValue());
+				  }
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				AppUtil.getProvider().getModalDialog().setErrMsg(e.getMessage());
 			}finally{
+				lock.unLock();
 				if(fos!=null){
 					try {
 						os.flush();
@@ -101,10 +102,11 @@ public class ManageVersionBean implements Serializable{
 			FileOutputStream fos = null;
 			FileInputStream ins = null;
 			String fileName = ((String)CONTEXTPARAMS.UPDATE_CENTER_VERSIONS_DIR.getValue()) + File.separator + fName;
-			byte [] buffer = new byte [100*1024];
+			byte [] buffer = new byte [1024*1024];
 			String lockName = FileUtil.removeFileExtension(fileName);
 			WarVersionLocks.addLockifNotExist(lockName);
 			SimpleLock lock = WarVersionLocks.getLock(lockName);
+			System.out.println("ManageVersionBean.ManageVersionBean.uploadfile ");
 			try {
 				if(!lock.lock(new Message("Uploading  file " + fileName))){
 					fos = new FileOutputStream(fileName);
@@ -119,6 +121,7 @@ public class ManageVersionBean implements Serializable{
 					//add to version descriptions
 					VersionDescriptions.initDescription(fileName, AppUtil.getProvider());
 				}else{
+					System.out.println("File " + lockName + "  is still uploading");
 					throw new RuntimeException(lock.getMessage().getValue());
 				}
 			} catch (Exception e) {
@@ -127,6 +130,7 @@ public class ManageVersionBean implements Serializable{
 				AppUtil.getProvider().getModalDialog().setErrMsg(e.getMessage());
 			}
 			finally{
+				lock.unLock();
 				if(fos!=null){
 					try {
 						fos.flush();
