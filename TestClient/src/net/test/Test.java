@@ -4,6 +4,7 @@ package net.test;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import net.is_bg.updatercenter.common.RequestParams;
 
 /***
@@ -19,7 +20,6 @@ start %PATH_TO_JAR%\jar.exe -cvf   %WAR_FILE%  %PATH_TO_UZIPPED_APP%\*
  */
 
 public class Test {
-	
 	
 
 	public static void main(String[] args) throws  Exception {
