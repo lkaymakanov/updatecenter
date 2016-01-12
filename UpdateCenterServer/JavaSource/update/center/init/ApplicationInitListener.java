@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
+import java.util.Properties;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -18,10 +19,14 @@ import net.is_bg.controller.AppConstants.VERSION_VALIDATION_PATTERNS;
 import net.is_bg.controller.ApplicationLibFiles;
 import net.is_bg.controller.FileChangeObserver;
 import net.is_bg.controller.FileChangeWatcher;
+import net.is_bg.updatercenter.common.FileUtil;
 
 public class ApplicationInitListener implements ServletContextListener{
 
 	static VersionFolderManager<EventInfo> foldermanager;
+	
+	public static  Properties users;
+	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		// TODO Auto-generated method stub
@@ -37,6 +42,9 @@ public class ApplicationInitListener implements ServletContextListener{
 		
 		//init version descriptions
 		VersionDescriptions.initDescriptions(AppUtil.getProvider());
+		
+		//load users
+		users = FileUtil.loadProperties((String)CONTEXTPARAMS.UPDATE_CENTER_USERS_PROPERTY_FILE.getValue());
 		
 		
 		foldermanager = new VersionFolderManager<EventInfo>(new IElementProcessor<EventInfo>(){

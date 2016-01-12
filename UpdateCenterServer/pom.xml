@@ -184,6 +184,11 @@
 			<version>3.3.2.GA</version>
 		</dependency>
 -->
+	<dependency>
+		<groupId>org.jvnet.mimepull</groupId>
+		<artifactId>mimepull</artifactId>
+		<version>1.9.3</version>
+	</dependency>
 		<dependency> 
 			<groupId>com.sun.jna</groupId> 
 			<artifactId>jna</artifactId> 
@@ -232,21 +237,30 @@
 			<version>2.3.0</version>
 		</dependency>
   		
+	  	<dependency>
+			<groupId>CC</groupId>
+			<artifactId>CCRest</artifactId>
+			<version>2.3</version>
+	  	</dependency>
   		
   		
+		<dependency>
+			<groupId>UpdateCenterCommon</groupId>
+			<artifactId>UpdateCenterCommon</artifactId>
+			<version>1.31</version>
+		</dependency>
+		<dependency>
+			<groupId>SplitMergeFile</groupId>
+			<artifactId>SplitMergeFile</artifactId>
+			<version>1.31</version>
+		</dependency>
   		
-
   		
-  		<dependency>
-  			<groupId>taskscheduler</groupId>
-  			<artifactId>taskscheduler</artifactId>
-  			<version>1.13</version>
-  		</dependency>
 
   		<dependency>
   			<groupId>UpdateCenterWarDeployment</groupId>
   			<artifactId>UpdateCenterWarDeployment</artifactId>
-  			<version>0.0.1</version>
+  			<version>1.32</version>
   		</dependency>
 	</dependencies>
 
@@ -423,6 +437,14 @@
            <name>ProjectRepo</name>
            <url>file://${project.basedir}/WebContent/customlibs</url>
         </repository>
+         <repository>
+		    <id>mdtteam-mvn-repo</id>
+		    <url>https://raw.githubusercontent.com/mdtteam/maven-repo/master/</url>
+		     <snapshots>
+		            <enabled>true</enabled>
+		            <updatePolicy>always</updatePolicy>
+		        </snapshots>
+		  </repository>
 	</repositories>
 	
 	

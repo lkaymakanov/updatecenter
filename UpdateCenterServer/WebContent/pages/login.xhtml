@@ -11,8 +11,21 @@
 	
 
 <ui:composition>
-<body style="  background-image:url('#{facesContext.externalContext.requestContextPath}/images/matrix_background.jpg');">
-	<img  src="#{facesContext.externalContext.requestContextPath}/images/login.png" />
+	<script type="text/javascript" src="../scripts/common.js"></script>
+<a4j:keepAlive beanName="loginBean"></a4j:keepAlive>
+<body onload="errMsg();" style=" height:100%; width:100%; background-image:url('#{facesContext.externalContext.requestContextPath}/images/matrix_background.jpg');">
+	<h:form>
+		<div id="login"  style="position:relative; background-image:url('#{facesContext.externalContext.requestContextPath}/images/login.png'); width : 351px; height : 297px;" >
+			<h:inputText style="position:absolute; top:110px; left:73px;" value="#{loginBean.user.userName}" />
+			<h:inputText style="position:absolute; top:170px; left:73px;" value="#{loginBean.user.userPass}" />
+			<h:commandButton value="" style="background:transparent; position:absolute;left : 37px; width : 278px; top : 221px; height : 57px;"  action="#{loginBean.login}"></h:commandButton>
+		</div>
+	</h:form>
+	
+	<ui:include src="/pages/msgModal.xhtml" >
+		<ui:param name="xBean" value="#{loginBean}" />
+	</ui:include>
 </body>
 </ui:composition>
+
 </html>

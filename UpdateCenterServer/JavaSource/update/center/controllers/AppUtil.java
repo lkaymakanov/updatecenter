@@ -25,4 +25,10 @@ public class AppUtil {
 			}
 		};
 	  }
+	  
+	  
+	  public static FacesContext getFacesContext(){
+		return   FacesContext.getCurrentInstance();
+	  }
+	  
 }

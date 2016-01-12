@@ -31,6 +31,10 @@
   <param-value>false</param-value>
  </context-param>
  <filter>
+  <filter-name>securityfilter</filter-name>
+  <filter-class>update.center.security.SecurityFilter</filter-class>
+ </filter>
+ <filter>
   <display-name>RichFaces Filter</display-name>
   <filter-name>richfaces</filter-name>
   <filter-class>org.ajax4jsf.Filter</filter-class>
@@ -41,6 +45,10 @@
   <dispatcher>REQUEST</dispatcher>
   <dispatcher>FORWARD</dispatcher>
   <dispatcher>INCLUDE</dispatcher>
+ </filter-mapping>
+ <filter-mapping>
+  <filter-name>securityfilter</filter-name>
+  <url-pattern>/pages/*</url-pattern>
  </filter-mapping>
  <listener>
   <listener-class>update.center.init.ApplicationInitListener</listener-class>
@@ -88,4 +96,7 @@
   <servlet-name>Faces Servlet</servlet-name>
   <url-pattern>/faces/*</url-pattern>
  </servlet-mapping>
+ <session-config>
+  <session-timeout>5</session-timeout>
+ </session-config>
 </web-app>

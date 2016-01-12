@@ -12,4 +12,23 @@
   <managed-bean-class>update.center.manager.ModalDialogProviderBean</managed-bean-class>
   <managed-bean-scope>session</managed-bean-scope>
  </managed-bean>
+ <managed-bean>
+  <managed-bean-name>loginBean</managed-bean-name>
+  <managed-bean-class>update.center.security.LoginBean</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ <navigation-rule>
+  <from-view-id>/pages/login.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>toServerInfo</from-outcome>
+   <to-view-id>/pages/serverinfo.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/pages/serverinfo.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>toLogin</from-outcome>
+   <to-view-id>/pages/login.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
 </faces-config>

@@ -54,7 +54,7 @@ public class UpdateCenterController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{appname}" + AppConstants.CREATE_SESSION_SUB_PATH)
-	public Session getSession(@Context HttpServletRequest req) {
+	public Session getSession(@Context HttpServletRequest req, @Context UriInfo info) {
 	    String remoteHost = req.getRemoteHost();
 	    String remoteAddr = req.getRemoteAddr();
 	    int remotePort = req.getRemotePort();
@@ -162,7 +162,7 @@ public class UpdateCenterController {
 		@Override
 		public Session getSession(RequestParams params) {
 			// TODO Auto-generated method stub
-			return AppUtil.getSessionRegister().getSession("-1", true, params.ipAddress);
+			return AppUtil.getSessionRegister().getSession(params, true, params.ipAddress);
 		}
 		
 		@Override

@@ -6,9 +6,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpSession;
 
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
 import net.is_bg.controller.AppConstants.VERSION_VALIDATION_PATTERNS;
@@ -22,6 +25,7 @@ import org.richfaces.event.UploadEvent;
 import update.center.controllers.AppUtil;
 import update.center.controllers.IUpdateCenterController;
 import update.center.controllers.UpdateCenterController;
+import update.center.init.ApplicationInitListener;
 import version.ModalDialog;
 import version.VersionDescriptions;
 import version.WarVersionDescription;
@@ -146,6 +150,22 @@ public class ManageVersionBean implements Serializable{
 	});
 
 	
+	public String logOut(){
+		HttpSession session = (HttpSession) AppUtil.getFacesContext().getExternalContext().getSession(false);
+		//session.removeAttribute(AppConstants.VISIT_KEY_SCOPE + AppConstants.VISIT_KEY);
+		if (session != null)  session.invalidate();
+		return "toLogin";
+	}
+	
+	
+	public List<String> getContextParams(){
+		List<String> s=  new ArrayList<>();
+		CONTEXTPARAMS [] a = CONTEXTPARAMS.values();
+		for(CONTEXTPARAMS p : a){
+			s.add(p.getName()+ "=" + p.getValue());
+		}
+		return s;
+	}
 	
 	public ModalDialog getModalDialog(){
 		return AppUtil.getProvider().getModalDialog();

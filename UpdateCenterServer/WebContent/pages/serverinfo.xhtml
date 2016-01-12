@@ -19,6 +19,7 @@
 <a4j:keepAlive beanName="manageVersionBean"></a4j:keepAlive>
 <body onload="errMsg();" style="background-image:url('#{facesContext.externalContext.requestContextPath}/images/matrix_background.jpg');">
 <h:form>
+	<h:commandButton value="logOut" action="#{manageVersionBean.logOut}" />
 	<rich:tabPanel>
 		<rich:tab label="Manage versions">
 			<rich:panel id="managerversions" >
@@ -132,7 +133,25 @@
 			</rich:dataTable>
 			</rich:panel>
 		</rich:tab>
+		
+		<rich:tab label="Context Params">
+			<rich:dataTable value="#{manageVersionBean.contextParams}" var="item">
+				 <f:facet name="header">
+	           		<rich:columnGroup>
+	           			<rich:column>
+								<h:outputText value="Param" />
+						</rich:column>
+	           		</rich:columnGroup>
+	           	</f:facet>			
+				<rich:column>
+					<h:outputText value="#{item}"/>
+				</rich:column>
+			</rich:dataTable>
+		</rich:tab>
 	</rich:tabPanel>
+	
+	
+	
 </h:form>
 
 <ui:include src="/pages/msgModal.xhtml" >
