@@ -124,7 +124,8 @@ public class SimpleLock {
 	 * </pre>
 	 */
 	public synchronized void unLock(){
-		cnt--;
+		long currentThreadId = Thread.currentThread().getId();
+		if(threadLockId == currentThreadId)cnt--;
 		if(cnt == 0){
 			log("THREAD WITH ID " + threadLockId  + " RELEASED THE LOCK WITH ID " +  id);
 			this.threadLockId = -1;
