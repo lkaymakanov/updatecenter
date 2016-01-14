@@ -1,0 +1,19 @@
+1.Determine application update settings
+	- determine server location
+	- determine application download directory
+	- determine application download lib directory
+	- determine application download script directory
+
+2.Download version
+	- determine if new version is available
+	- retrieve the version description 
+	- download version chunks
+	- determine necessary libraries
+	- download necessary libraries
+	- download scripts
+	
+3.Build up version
+	- merge the file chunks - this must be a zip file of the new version without the libraries !!!
+	- unzip the result file!!!
+	- copy the needed libraries (the ones found in the description of version) into $DOWNLOAD_DIR//LTF/WEB-INF/lib  folder !!!
+	- zip the application folder again &  create the WAR file !!!
