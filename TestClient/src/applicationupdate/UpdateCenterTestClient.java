@@ -13,7 +13,6 @@ import java.util.Map;
 
 public class UpdateCenterTestClient {
 	
-	private Map<String, String> keyVal = new HashMap<String, String>();
 	
 	
 	public static void main(String[] args) throws  Exception {

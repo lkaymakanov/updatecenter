@@ -48,15 +48,14 @@ public class DownLoadUtils {
 	
 	
 	public static String getParamTable(Map<String, String> params){
-		int tblwidth = 80;
+		int tblwidth = 70;
 		char tblCorner = '+';
 		char tblSide = '|';
 		StringBuilder bd = new  StringBuilder();
 		bd.append(tblCorner + padJustify("PARAM TABLE", "=", tblwidth) + tblCorner); bd.append("\n");
 		bd.append(tblSide + padJustify("            ", " ", tblwidth) + tblSide);bd.append("\n");
 		for(String s : params.keySet()){
-			bd.append(s + "=" +params.get(s));
-			bd.append("\n");
+			bd.append(tblSide + padJustify(s + "=" +params.get(s), " ", tblwidth) + tblSide);bd.append("\n");
 		}
 		bd.append(tblSide + padJustify("            ", " ", tblwidth) + tblSide);bd.append("\n");
 		bd.append(tblCorner + padJustify("END  PARAM TABLE", "=", tblwidth) + tblCorner);bd.append("\n");
