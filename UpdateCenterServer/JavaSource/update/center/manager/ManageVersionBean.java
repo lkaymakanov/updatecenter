@@ -25,6 +25,8 @@ import org.richfaces.event.UploadEvent;
 import update.center.controllers.AppUtil;
 import update.center.controllers.IUpdateCenterController;
 import update.center.controllers.UpdateCenterController;
+import update.center.init.ApplicationSessionManager;
+import update.center.init.HttpSessionEx;
 import version.ModalDialog;
 import version.VersionDescriptions;
 import version.WarVersionDescription;
@@ -46,7 +48,7 @@ public class ManageVersionBean implements Serializable{
     
 	private String pattern;
 	
-	
+	List<HttpSessionEx> sessions = new ArrayList<HttpSessionEx>();
 	
 	
 	
@@ -228,8 +230,8 @@ public class ManageVersionBean implements Serializable{
      * @return the string
      */
     public String modalYes() {
-	modalDialogClear();
-	return null;
+		modalDialogClear();
+		return null;
     }
 
     /**
@@ -238,8 +240,8 @@ public class ManageVersionBean implements Serializable{
      * @return the string
      */
     public String modalNo() {
-	modalDialogClear();
-	return null;
+		modalDialogClear();
+		return null;
     }
 
     /**
@@ -248,8 +250,8 @@ public class ManageVersionBean implements Serializable{
      * @return the string
      */
     public String modalOk() {
-	modalDialogClear();
-	return null;
+		modalDialogClear();
+		return null;
     }
 
     // send report button event handler
@@ -259,11 +261,13 @@ public class ManageVersionBean implements Serializable{
      * @return the string
      */
     public String modalReport() {
-
-	modalDialogClear();
-	return null;
+    	modalDialogClear();
+    	return null;
     }
 	
 	
+    public List<HttpSessionEx> getUserSessions(){
+    	return ApplicationSessionManager.getSessions();
+    }
 	
 }

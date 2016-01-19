@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import update.center.init.ApplicationSessionManager;
+
 public class SessionListener implements HttpSessionListener {
 
 	public SessionListener() {
@@ -20,7 +22,7 @@ public class SessionListener implements HttpSessionListener {
 		// get the destroying session...
 		HttpSession session = event.getSession();
 		System.out.println("Current Session destroyed :" + session.getId() + " Logging out user...");
-
+		ApplicationSessionManager.removeSessionFromMap(session);
 		/*
 		 * nobody can reach user data after this point because session is
 		 * invalidated already. So, get the user data from session and save its

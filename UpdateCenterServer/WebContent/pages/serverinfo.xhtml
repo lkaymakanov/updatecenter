@@ -15,6 +15,8 @@
 <style>
 .rich-tabpanel-content {background-color: transparent; border: none;}
 .rich-fileupload-list-decor{ border: none; }
+.rich-tab-inactive {background-image: none; background-color: #C0C0C0;}
+.rich-tab-active {background-image: none; background-color: #F1F1F1;}
 </style>
 <a4j:keepAlive beanName="manageVersionBean"></a4j:keepAlive>
 <body onload="errMsg();" style="background-image:url('#{facesContext.externalContext.requestContextPath}/images/matrix_background.jpg');">
@@ -64,24 +66,65 @@
        			 </rich:fileUpload>
        			</rich:panel>
 		</rich:tab>
-		<rich:tab label="Connected Clients">
-			<rich:dataTable value="#{manageVersionBean.sessionInfo}" var="item">
-			 <f:facet name="header">
+		
+		<rich:tab label="Connected Users">
+			<rich:dataTable value="#{manageVersionBean.userSessions}" var="item">
+				<f:facet name="header">
            		<rich:columnGroup>
            			<rich:column>
-							<h:outputText value="Session" />
+							<h:outputText value="Session Id" />
 					</rich:column>
+					
 					<rich:column>
 							<h:outputText value="Ip Address" />
+					</rich:column>
+					<rich:column>
+							<h:outputText value="User" />
+					</rich:column>
+					<rich:column>
+							<h:outputText value="Session TimeOut" />
+					</rich:column>
+					<rich:column>
+							<h:outputText value="Session Create Time" />
 					</rich:column>
            		</rich:columnGroup>
            	</f:facet>			
 			<rich:column>
-				<h:outputText value="#{item.sessionId}"/>
+				<h:outputText value="#{item.id}"/>
 			</rich:column>
 			<rich:column>
 				<h:outputText value="#{item.ipAddress}"/>
 			</rich:column>
+			<rich:column>
+				<h:outputText value="#{item.user.userName}"/>
+			</rich:column>
+			<rich:column>
+				<h:outputText value="#{item.creationTime} minutes"/>
+			</rich:column>
+			<rich:column>
+				<h:outputText value="#{item.createDateTime}"/>
+			</rich:column>
+			</rich:dataTable>
+		</rich:tab>
+		
+		<rich:tab label="Connected Clients">
+			<rich:dataTable value="#{manageVersionBean.sessionInfo}" var="item">
+				 <f:facet name="header">
+	           		<rich:columnGroup>
+	           			<rich:column>
+								<h:outputText value="Session" />
+						</rich:column>
+						<rich:column>
+								<h:outputText value="Ip Address" />
+						</rich:column>
+	           		</rich:columnGroup>
+	           	</f:facet>			
+				<rich:column>
+					<h:outputText value="#{item.sessionId}"/>
+				</rich:column>
+				<rich:column>
+					<h:outputText value="#{item.ipAddress}"/>
+				</rich:column>
 			</rich:dataTable>
 		</rich:tab>
 		<rich:tab label="Libraries in Update Center">

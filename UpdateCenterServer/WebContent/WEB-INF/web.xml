@@ -20,7 +20,7 @@
  </context-param>
  <context-param>
   <param-name>org.richfaces.SKIN</param-name>
-  <param-value>classic</param-value>
+  <param-value>black-mod</param-value>
  </context-param>
  <context-param>
   <param-name>org.richfaces.enableControlSkinning</param-name>
@@ -52,6 +52,9 @@
  </filter-mapping>
  <listener>
   <listener-class>update.center.init.ApplicationInitListener</listener-class>
+ </listener>
+ <listener>
+  <listener-class>update.center.security.SessionListener</listener-class>
  </listener>
  <!--
   <welcome-file-list>

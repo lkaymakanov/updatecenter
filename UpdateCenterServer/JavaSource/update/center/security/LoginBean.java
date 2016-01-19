@@ -6,8 +6,17 @@ import java.util.Properties;
 
 
 
+
+
+
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import update.center.controllers.AppUtil;
 import update.center.init.ApplicationInitListener;
+import update.center.init.ApplicationSessionManager;
+import update.center.init.HttpSessionEx;
 import version.ModalDialog;
 
 public class LoginBean implements Serializable{
@@ -18,10 +27,10 @@ public class LoginBean implements Serializable{
 	private Properties users = ApplicationInitListener.users;
 	private User user = new  User();
 	public final static String USER_KEY = "user";
-	private final static String SUCCESS_FULL_LLOGIN  = "toServerInfo";
+	private final static String SUCCESS_FULL_LOGIN  = "toServerInfo";
 	
 	public String login(){
-		//HttpServletRequest request = (HttpServletRequest) AppUtil.getFacesContext().getExternalContext().getRequest();
+		HttpServletRequest request = (HttpServletRequest) AppUtil.getFacesContext().getExternalContext().getRequest();
 		
 		try{
 			Object  p = users.get(user.getUserName());
@@ -31,12 +40,17 @@ public class LoginBean implements Serializable{
 				if(!userpass.equals(user.getUserPass())) throw new RuntimeException("Pass is not correct!!!");
 			}
 			
+			
 			//add user to session
 			System.out.println("user logged in successfully...");
 			
 			//put user to session map
 			AppUtil.getFacesContext().getExternalContext().getSessionMap().put(USER_KEY, user);
-			return SUCCESS_FULL_LLOGIN;
+			HttpSessionEx session = new HttpSessionEx((HttpSession)AppUtil.getFacesContext().getExternalContext().getSession(false));
+			session.setUser(user);
+			session.setIpAddress(request.getRemoteAddr());
+			ApplicationSessionManager.addSession(session);
+			return SUCCESS_FULL_LOGIN;
 		}
 		catch (Exception e) {
 			// TODO: handle exception
