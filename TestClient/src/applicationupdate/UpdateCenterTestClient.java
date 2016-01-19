@@ -6,9 +6,6 @@ import java.util.Map;
 
 
 
-
-
-
 /***
  * @author lubo
  *
@@ -16,7 +13,9 @@ import java.util.Map;
 
 public class UpdateCenterTestClient {
 	
-
+	private Map<String, String> keyVal = new HashMap<String, String>();
+	
+	
 	public static void main(String[] args) throws  Exception {
 		Map<String, String> keyVal = new HashMap<String, String>();
 		
@@ -24,7 +23,7 @@ public class UpdateCenterTestClient {
 			for(int i = 0 ; i < args.length; i++){
 				String k = args[i];
 				String v = (i + 1) < args.length ? args[++i] : null;
-				keyVal.put(k.toLowerCase(), v == null ? null : v.toLowerCase());
+				keyVal.put(k.toLowerCase(), v == null ? null : v);
 			}
 		}
 		
@@ -38,13 +37,13 @@ public class UpdateCenterTestClient {
 			System.out.println(" -downloaddir [aplication download dir - if not set current dir is used...]  ");
 			System.out.println(" -libdir [aplication download library dir - if not set current dir is used...]  ");
 			System.out.println(" -jar [directory path of jar.exe file used to warp application - if not set current dir is used...]");
-			System.out.println(" -socketProtocol  one of these [ssl | tls] ");
-			System.out.println(" -storeType one of these [jks | pkcs12]  ");
+			System.out.println(" -socketprotocol  one of these [ssl | tls] ");
+			System.out.println(" -storetype one of these [jks | pkcs12]  ");
 			
-			System.out.println(" -keystoreFile [the path to the keystorefile]  ");
-			System.out.println(" -keystorePass [the password of the keysore]  ");
-			System.out.println(" -keyAlias [private key alias]  ");
-			System.out.println(" -keyPass [private key password]  ");
+			System.out.println(" -keystorefile [the path to the keystorefile]  ");
+			System.out.println(" -keystorepass [the password of the keysore]  ");
+			System.out.println(" -keyalias [private key alias]  ");
+			System.out.println(" -keypass [private key password]  ");
 			return; 
 		}
 		
@@ -53,16 +52,19 @@ public class UpdateCenterTestClient {
 		String port =  keyVal.get("-p")!=null ? keyVal.get("-p") : "8080";
 		String application =  keyVal.get("-app")!=null ? keyVal.get("-app") : "ltf";
 		
-		String keystoreFile = keyVal.get("-app")!=null ? keyVal.get("-app") : null;
-		String keystorePass = keyVal.get("-keystorePass")!=null ? keyVal.get("-keystorePass") : null;
-		String keyAlias = keyVal.get("-keyAlias")!=null ? keyVal.get("-keyAlias") : null;
-		String keyPass = keyVal.get("-keyPass")!=null ? keyVal.get("-keyPass") : null;
-		String socketProtocol = keyVal.get("-socketProtocol")!=null ? keyVal.get("-socketProtocol").toLowerCase() : null;
-		String storeType = keyVal.get("-storeType")!=null ? keyVal.get("-storeType").toLowerCase() : null;
+		String keystoreFile = keyVal.get("-keystorefile")!=null ? keyVal.get("-keystorefile") : null;
+		String keystorePass = keyVal.get("-keystorepass")!=null ? keyVal.get("-keystorepass") : null;
+		String keyAlias = keyVal.get("-keyalias")!=null ? keyVal.get("-keyalias") : null;
+		String keyPass = keyVal.get("-keypass")!=null ? keyVal.get("-keypass") : null;
+		String socketProtocol = keyVal.get("-socketprotocol")!=null ? keyVal.get("-socketprotocol").toLowerCase() : null;
+		String storeType = keyVal.get("-storetype")!=null ? keyVal.get("-storetype").toLowerCase() : null;
 		
 		String downloaddir = keyVal.get("-downloaddir")!=null ? keyVal.get("-downloaddir").toLowerCase() : "verions";
 		String libdir = keyVal.get("-libdir")!=null ? keyVal.get("-libdir").toLowerCase() : "libs";
 		String jar = keyVal.get("-jar")!=null ? keyVal.get("-jar").toLowerCase() : "";
+		
+		System.out.println(DownLoadUtils.getParamTable(keyVal));
+		
 		
 		DownloadSettings dSettings = new  DownloadSettings();
 		dSettings.setApplication(application);
@@ -78,8 +80,6 @@ public class UpdateCenterTestClient {
 		dSettings.setKeystoreFile(keystoreFile);
 		dSettings.setKeystorePass(keystorePass);
 		
-		//System.out.println(CONTEXTPARAMS.toZtring());
-		//System.out.println(new File("").getAbsolutePath());
 		DownloadVersion updater = new DownloadVersion(dSettings);
 		updater.update();
 		

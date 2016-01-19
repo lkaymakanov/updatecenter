@@ -1,6 +1,7 @@
 package applicationupdate;
 
 
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -8,6 +9,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.Map;
 import java.util.Set;
 
 import net.is_bg.updatercenter.common.Enumerators;
@@ -44,6 +46,49 @@ public class DownLoadUtils {
 		}
 	}
 	
+	
+	public static String getParamTable(Map<String, String> params){
+		int tblwidth = 80;
+		char tblCorner = '+';
+		char tblSide = '|';
+		StringBuilder bd = new  StringBuilder();
+		bd.append(tblCorner + padJustify("PARAM TABLE", "=", tblwidth) + tblCorner); bd.append("\n");
+		bd.append(tblSide + padJustify("            ", " ", tblwidth) + tblSide);bd.append("\n");
+		for(String s : params.keySet()){
+			bd.append(s + "=" +params.get(s));
+			bd.append("\n");
+		}
+		bd.append(tblSide + padJustify("            ", " ", tblwidth) + tblSide);bd.append("\n");
+		bd.append(tblCorner + padJustify("END  PARAM TABLE", "=", tblwidth) + tblCorner);bd.append("\n");
+		bd.append("\n");
+		return bd.toString();
+	}
+	
+	
+	public static String padJustify(String s, String symbol, int upto){
+		if(s == null || symbol == null) return null;
+		int l = s.length();
+		if(upto <= l) return s;
+		int padleft = (upto - l)/2;
+		return 	getPadding(getPadding(s, symbol, padleft + l, true), symbol, upto, false);
+	}
+	
+	
+	/**Padding up to fixed length with intervals or zeroes in front of string or after string.*/
+	public static String getPadding(String st, String paddingSymbol, int upto, boolean left){
+		//StringBuilder sb = new StringBuilder(st);
+		
+		if(st != null && upto >= st.length()){
+			int diff = upto - st.length();
+			for(int i = 0; i < diff; i ++ ){
+				if(left)  st = paddingSymbol + st;
+				else      st = st + paddingSymbol;
+			}
+		}
+		return st;
+	}
+	
+	
 	/***
 	 * Configures the targeted end point by the download settings!!!
 	 * @param sSettings
@@ -61,10 +106,11 @@ public class DownLoadUtils {
 		if(sSettings.isSecure()){
 			ssl.protocol(dSettings.getSocketProtocol()).
 			keystore(dSettings.getStoreType(), dSettings.getKeystoreFile(), dSettings.getKeystorePass()).
-			privateKey(dSettings.getKeyAlias(), dSettings.getKeyPass());
+			privateKey(dSettings.getKeyAlias(), dSettings.getKeyPass()).trustAllCerts().complete();
 		}else{
-			ssl.noSSL().complete();
+			ssl.noSSL();
 		}
+	
 	}
 	
 	
