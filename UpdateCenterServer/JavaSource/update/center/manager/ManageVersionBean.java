@@ -25,6 +25,7 @@ import org.richfaces.event.UploadEvent;
 import update.center.controllers.AppUtil;
 import update.center.controllers.IUpdateCenterController;
 import update.center.controllers.UpdateCenterController;
+import update.center.init.ApplicationInitListener;
 import update.center.init.ApplicationSessionManager;
 import update.center.init.HttpSessionEx;
 import version.ModalDialog;
@@ -50,6 +51,7 @@ public class ManageVersionBean implements Serializable{
 	
 	List<HttpSessionEx> sessions = new ArrayList<HttpSessionEx>();
 	
+	private List<String> appLibs = new ArrayList<String>();
 	
 	
 	/**
@@ -74,7 +76,7 @@ public class ManageVersionBean implements Serializable{
 					os.write(file);
 					
 					//add to version descriptions
-					VersionDescriptions.initDescription(fileName, AppUtil.getProvider());
+					VersionDescriptions.initDescription(fileName, AppUtil.getProvider(), ApplicationInitListener.packZips);
 				  }else{
 					  System.out.println("File " + lockName + "  is still uploading");
 					  throw new RuntimeException(lock.getMessage().getValue());
@@ -121,7 +123,7 @@ public class ManageVersionBean implements Serializable{
 						bytes = ins.read(buffer);
 					}
 					//add to version descriptions
-					VersionDescriptions.initDescription(fileName, AppUtil.getProvider());
+					VersionDescriptions.initDescription(fileName, AppUtil.getProvider(), ApplicationInitListener.packZips);
 				}else{
 					System.out.println("File " + lockName + "  is still uploading");
 					throw new RuntimeException(lock.getMessage().getValue());
@@ -269,5 +271,27 @@ public class ManageVersionBean implements Serializable{
     public List<HttpSessionEx> getUserSessions(){
     	return ApplicationSessionManager.getSessions();
     }
+    
+    public void setAppLibs(List<String> libs){
+    	this.appLibs = libs;
+    }
+    
+    public void closeAppLibsModal(){
+    	this.appLibs = new ArrayList<String>();
+    }
+
+
+	public List<String> getAppLibs() {
+		return appLibs;
+	}
+    
+    
+	public String getAppLibsString() {
+		String s ="";
+		for(String ss :appLibs){
+			s+=ss + ", ";
+		}
+		return s.equals("") ? null : s;
+	}
 	
 }

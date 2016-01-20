@@ -1,9 +1,15 @@
 package update.center.init;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+
 
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
 import net.is_bg.controller.AppConstants.VERSION_VALIDATION_PATTERNS;
@@ -15,6 +21,8 @@ import version.VersionDescriptions;
 public class ApplicationInitListener implements ServletContextListener{
 
 	//static VersionFolderManager<EventInfo> foldermanager;
+	/**A hash map that contains the pack zips for each java version*/
+	public final static Map<String, Boolean> packZips = new  Hashtable<String, Boolean>();
 	
 	public static  Properties users;
 	
@@ -31,11 +39,30 @@ public class ApplicationInitListener implements ServletContextListener{
 		//read validation patterns property files
 		VERSION_VALIDATION_PATTERNS.initPropertiesByPropertyFile(CONTEXTPARAMS.UPDATE_CENTER_VALIDATION_PATTERN_PROPERTY_FILE.getValue().toString());
 		
+		
+		//copy pack zip for each java version into the server lib directory
+		String packFolder = new FindResource().getResourceUrl("pack").getFile();
+		
+		File f = new  File(packFolder);
+		for(String child : f.list()){
+			System.out.println(packFolder + child);
+			try {
+				FileUtil.copyFile(new File(packFolder + child), new File((String)CONTEXTPARAMS.UPDATE_CENTER_LIB_DIR.getValue() + File.separator + child));
+				packZips.put(child, true);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}
+		
 		//init version descriptions
-		VersionDescriptions.initDescriptions(AppUtil.getProvider());
+		VersionDescriptions.initDescriptions(AppUtil.getProvider(), packZips);
 		
 		//load users
 		users = FileUtil.loadProperties((String)CONTEXTPARAMS.UPDATE_CENTER_USERS_PROPERTY_FILE.getValue());
+		
+		//copy to lib directory
 		
 		/*
 		foldermanager = new VersionFolderManager<EventInfo>(new IElementProcessor<EventInfo>(){
@@ -69,6 +96,7 @@ public class ApplicationInitListener implements ServletContextListener{
 		
 		System.out.println("===================================== UpdateCenterServer context initialized =========================================");
 	}
+	
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {

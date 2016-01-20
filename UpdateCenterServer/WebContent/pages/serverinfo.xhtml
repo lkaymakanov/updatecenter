@@ -19,7 +19,7 @@
 .rich-tab-active {background-image: none; background-color: #F1F1F1;}
 </style>
 <a4j:keepAlive beanName="manageVersionBean"></a4j:keepAlive>
-<body onload="errMsg();" style="background-image:url('#{facesContext.externalContext.requestContextPath}/images/background.jpg');">
+<body onload="errMsg(); showLibModal();" style="background-image:url('#{facesContext.externalContext.requestContextPath}/images/background.jpg');">
 <h:form>
 	<h:commandButton value="logOut" action="#{manageVersionBean.logOut}" />
 	<rich:tabPanel>
@@ -38,6 +38,7 @@
 								<td class="rich-table-headercell">Pattern</td>
 								<td class="rich-table-headercell">Status</td>
 								<td class="rich-table-headercell">Manage</td>
+								<td class="rich-table-headercell">App libraries</td>
 							</tr>
 						</thead>
 						<a4j:repeat value="#{manageVersionBean.versionDescriptions}" var="desc">
@@ -54,6 +55,11 @@
 										<h:commandButton value="Publish" action="#{desc.publish}" disabled="#{!desc.publishable}" />
 										<h:commandButton value="Stop Publish" action="#{desc.stoppublish}" disabled="#{!desc.stoppublishable}" />
 										<h:commandButton value="Detete" action="#{desc.delete}" disabled="#{!desc.deletable}" />
+									</td>
+									<td class="rich-table-headercell">
+										<h:commandButton  value="View App Libs" action="#{manageVersionBean.setAppLibs(desc.versionInfo.libs)}" >
+	            						
+	           							</h:commandButton>
 									</td>
 								</tr>
 						</a4j:repeat>
@@ -198,6 +204,10 @@
 </h:form>
 
 <ui:include src="/pages/msgModal.xhtml" >
+	<ui:param name="xBean" value="#{manageVersionBean}" />
+</ui:include>
+
+<ui:include src="/pages/msgModal2.xhtml">
 	<ui:param name="xBean" value="#{manageVersionBean}" />
 </ui:include>
 
