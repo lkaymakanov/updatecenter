@@ -9,6 +9,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,6 +60,42 @@ public class DownLoadUtils {
 		}
 		bd.append(tblSide + padJustify("            ", " ", tblwidth) + tblSide);bd.append("\n");
 		bd.append(tblCorner + padJustify("END  PARAM TABLE", "=", tblwidth) + tblCorner);bd.append("\n");
+		bd.append("\n");
+		return bd.toString();
+	}
+	
+	public static String toPrintTable(List<String> lines, String title, int tblwidth ){
+		char tblCorner = '+';
+		char tblSide = '|';
+		StringBuilder bd = new  StringBuilder();
+		bd.append(tblCorner + padJustify(title, "=", tblwidth) + tblCorner); bd.append("\n");
+		bd.append(tblSide + padJustify("            ", " ", tblwidth) + tblSide);bd.append("\n");
+		for(String s : lines){
+			bd.append(tblSide + padJustify(s , " ", tblwidth) + tblSide);bd.append("\n");
+		}
+		bd.append(tblSide + padJustify("            ", " ", tblwidth) + tblSide);bd.append("\n");
+		bd.append(tblCorner + padJustify("==", "=", tblwidth) + tblCorner);bd.append("\n");
+		bd.append("\n");
+		return bd.toString();
+	}
+	
+	public static String toPrintTable(String line, String title, int tblwidth){
+		char tblCorner = '+';
+		char tblSide = '|';
+		StringBuilder bd = new  StringBuilder();
+		bd.append(tblCorner + padJustify(title, "=", tblwidth) + tblCorner); bd.append("\n");
+		bd.append(tblSide + padJustify("            ", " ", tblwidth) + tblSide);bd.append("\n");
+		bd.append(tblSide + padJustify(line, " ", tblwidth) + tblSide);bd.append("\n");
+		bd.append(tblSide + padJustify("            ", " ", tblwidth) + tblSide);bd.append("\n");
+		bd.append(tblCorner + padJustify("==", "=", tblwidth) + tblCorner);bd.append("\n");
+		bd.append("\n");
+		return bd.toString();
+	}
+	
+	public static String singleHeaderLine( String title, int tblwidth){
+		char tblCorner = '+';
+		StringBuilder bd = new  StringBuilder();
+		bd.append(tblCorner + padJustify(title, "=", tblwidth) + tblCorner); bd.append("\n");
 		bd.append("\n");
 		return bd.toString();
 	}

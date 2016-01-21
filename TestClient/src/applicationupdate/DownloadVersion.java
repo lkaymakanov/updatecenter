@@ -157,28 +157,41 @@ class DownloadVersion  {
 		// TODO Auto-generated method stub
 		//get the last version from the server & the pieces it is split into 
 		getLatestVersion();
-		
 		versionDir = paths.getDownloadDir() + File.separator + versionInfo.getNumber();
 		
 		//save received buffers to a file at the client side...
+		System.out.println(DownLoadUtils.toPrintTable("starting downloading chunk files...", "DOWNLOADING CHUNK FILES", 70));
 		downloadChunks();
+		System.out.println(DownLoadUtils.singleHeaderLine("downloading chunk files successful...",  70));
 		
 		//Download the library files!!!
+		System.out.println(DownLoadUtils.toPrintTable("starting downloading lib files...", "DOWNLOADING LIB FILES", 70));
 		downloadLibs();
+		System.out.println(DownLoadUtils.singleHeaderLine("downloading lib files successful...",  70));
 		
 		//unzip the application without the lib files
+		System.out.println(DownLoadUtils.toPrintTable("starting unzipping files...", "UNZIPPING FILES", 70));
 		unzip();
+		System.out.println(DownLoadUtils.singleHeaderLine("unzipping files successful...",  70));
 		
+		System.out.println(DownLoadUtils.toPrintTable("starting copying pack%VERSION%.zip files...", "COPYING FILES", 70));
 		copyPackJavaVerZipToJarPathDir();
+		System.out.println(DownLoadUtils.singleHeaderLine("copying pack%VERSION%.zip files successful...",  70));
 
 		//copy libraries to web inf directory
+		System.out.println(DownLoadUtils.toPrintTable("starting copying lib files to WEB-INF...", "COPYING LIB FILES TO WEB-INF", 70));
 		copyLibsToWebInf();
+		System.out.println(DownLoadUtils.singleHeaderLine("copying lib files to WEB-INF sucessful...",  70));
 		
 		//zip back to war file
+		System.out.println(DownLoadUtils.toPrintTable("starting creating WAR FILE", "CREATING WAR FILE", 70));
 		createWarFile();
+		System.out.println(DownLoadUtils.singleHeaderLine("creating WAR FILE successful", 70));
 		
 		//deletes unnecessary files & compares CRC's!!!
+		System.out.println(DownLoadUtils.toPrintTable("starting finalization", "FINALIZATION", 70));
 		performFinalSteps();
+		System.out.println(DownLoadUtils.singleHeaderLine("finalization successful", 70));
 	}
 	
 	
