@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+
+
 //import net.is_bg.ltf.applicationscriptmanagement.FindResource;
 //import net.is_bg.ltf.db.common.impl.logging.LogSystemOut;
 //import net.is_bg.ltf.db.common.interfaces.logging.ILog;
@@ -24,6 +26,7 @@ import net.is_bg.updatercenter.common.crc.Crc;
 import net.is_bg.updatercenter.common.resources.Session;
 import net.is_bg.updatercenter.common.resources.VersionInfo;
 import net.is_bg.updatercenter.common.zippack.Packager;
+import applicationupdate.ClientJavaVersion.JAVA_VERSION;
 
 import com.cc.rest.client.Requester;
 import com.cc.rest.client.Requester.MEDIA_TYPE;
@@ -166,6 +169,8 @@ class DownloadVersion  {
 		//unzip the application without the lib files
 		unzip();
 		
+		copyPackJavaVerZipToJarPathDir();
+
 		//copy libraries to web inf directory
 		copyLibsToWebInf();
 		
@@ -266,6 +271,32 @@ class DownloadVersion  {
 		}
 	}
 
+	/***
+	 * This copies the pack_NUMBER_OF_JAVA_VERSION.zip file from lib app lidir to JAR_PATH folder
+	 */
+	private void copyPackJavaVerZipToJarPathDir(){
+		String fName = "pack" + JAVA_VERSION.getClientVersion().getNumber() + ".zip";
+		try {
+			
+			//copy pack_NUMBER_OF_JAVA_VERSION.zip file from lib directory to  the PATH_TO_JAR directory!!!
+			File sourcef = new File(paths.getLibDir() +File.separator + fName);
+			File destF = new File(PATH_TO_JAR +File.separator + fName);
+			System.out.println("copying  " + sourcef.getAbsolutePath() + " to " + destF.getAbsolutePath());
+			FileUtil.copyFile(sourcef, destF);
+			
+			//unzip the zip file into the PATH_TO_JAR directory
+			Packager.unZipIt(destF.getAbsolutePath(), PATH_TO_JAR);
+			
+			//delete source & destination zip files
+			sourcef.delete();
+			destF.delete();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 	
 	private void unzip(){
 		//create unzip app dir if not exists

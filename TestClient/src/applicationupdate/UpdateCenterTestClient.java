@@ -6,6 +6,7 @@ import java.util.Map;
 
 
 
+
 /***
  * @author lubo
  *
@@ -81,7 +82,6 @@ public class UpdateCenterTestClient {
 		
 		DownloadVersion updater = new DownloadVersion(dSettings);
 		updater.update();
-		
 		
 	}
 	
