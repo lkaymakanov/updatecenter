@@ -19,6 +19,7 @@ import net.is_bg.ltf.Message;
 import net.is_bg.ltf.SimpleLock;
 import net.is_bg.updatercenter.common.FileUtil;
 import net.is_bg.updatercenter.common.resources.Session;
+import net.is_bg.updatercenter.common.resources.VersionInfo;
 
 import org.richfaces.event.UploadEvent;
 
@@ -51,7 +52,7 @@ public class ManageVersionBean implements Serializable{
 	
 	List<HttpSessionEx> sessions = new ArrayList<HttpSessionEx>();
 	
-	private List<String> appLibs = new ArrayList<String>();
+	private VersionInfo selectedVersionInfo = new  VersionInfo();
 	
 	
 	/**
@@ -224,6 +225,7 @@ public class ManageVersionBean implements Serializable{
      */
     public void modalDialogClear() {
     	getModalDialog().clear();
+   
     }
 
     /**
@@ -271,27 +273,19 @@ public class ManageVersionBean implements Serializable{
     public List<HttpSessionEx> getUserSessions(){
     	return ApplicationSessionManager.getSessions();
     }
-    
-    public void setAppLibs(List<String> libs){
-    	this.appLibs = libs;
-    }
-    
-    public void closeAppLibsModal(){
-    	this.appLibs = new ArrayList<String>();
-    }
 
 
-	public List<String> getAppLibs() {
-		return appLibs;
+	public VersionInfo getSelectedVersionInfo() {
+		return selectedVersionInfo;
+	}
+
+
+	public void setSelectedVersionInfo(VersionInfo selectedVersionInfo) {
+		this.selectedVersionInfo = selectedVersionInfo;
+		this.getModalDialog().setInfoMsg(selectedVersionInfo.toString());
 	}
     
+   
     
-	public String getAppLibsString() {
-		String s ="";
-		for(String ss :appLibs){
-			s+=ss + ", ";
-		}
-		return s.equals("") ? null : s;
-	}
 	
 }

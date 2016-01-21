@@ -18,18 +18,20 @@
 		 
 	 
 		<f:facet name="controls">
-            <h:panelGrid rendered="#{xBean.modalDialog.errMsg != null}">
+            <h:panelGrid rendered="true">
             	<h:commandButton  action="#{xBean.modalOk}"  image="#{xBean.modalDialog.closeIconPath}" styleClass="hidelink" id="hidelink"   />
             </h:panelGrid>
         </f:facet>
  		
 			<table cellpadding="0" cellspacing="0" style="width: 100%; padding-bottom: 8px;">
 				<tr valign="middle"><td align="center" width="60px" >
-					<h:graphicImage id="modalIcon" value="#{xBean.modalDialog.iconPath}" />
+				
 				</td><td style="display: block; overflow: auto;">
+				<pre>
 					<h:outputText id="modalMsg" style="display: block; max-height: 360px;"
 								  value="#{xBean.modalDialog.errMsg} #{xBean.modalDialog.infoMsg} #{xBean.modalDialog.yesNoMsg}" 
 								  escape="false"/>
+				</pre>
 				</td></tr>
 			</table>	
 			<center>

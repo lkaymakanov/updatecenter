@@ -19,7 +19,7 @@
 .rich-tab-active {background-image: none; background-color: #F1F1F1;}
 </style>
 <a4j:keepAlive beanName="manageVersionBean"></a4j:keepAlive>
-<body onload="errMsg(); showLibModal();" style="background-image:url('#{facesContext.externalContext.requestContextPath}/images/background.jpg');">
+<body onload="errMsg();" style="background-image:url('#{facesContext.externalContext.requestContextPath}/images/background.jpg');">
 <h:form>
 	<h:commandButton value="logOut" action="#{manageVersionBean.logOut}" />
 	<rich:tabPanel>
@@ -57,7 +57,7 @@
 										<h:commandButton value="Detete" action="#{desc.delete}" disabled="#{!desc.deletable}" />
 									</td>
 									<td class="rich-table-headercell">
-										<h:commandButton  value="View App Libs" action="#{manageVersionBean.setAppLibs(desc.versionInfo.libs)}" >
+										<h:commandButton  value="View App Libs" action="#{manageVersionBean.setSelectedVersionInfo(desc.versionInfo)}" >
 	            						
 	           							</h:commandButton>
 									</td>
@@ -207,9 +207,7 @@
 	<ui:param name="xBean" value="#{manageVersionBean}" />
 </ui:include>
 
-<ui:include src="/pages/msgModal2.xhtml">
-	<ui:param name="xBean" value="#{manageVersionBean}" />
-</ui:include>
+
 
 </body>
 </ui:composition>
