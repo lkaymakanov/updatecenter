@@ -37,7 +37,7 @@ public class LoginBean implements Serializable{
 			String userpass = (p == null) ? null : p.toString();
 			if(userpass == null) throw new RuntimeException("User not exists!!!");
 			else{
-				if(!userpass.equals(user.getUserPass())) throw new RuntimeException("Pass is not correct!!!");
+				if(!userpass.equals(new Sha512().digest(user.getUserName() +  user.getUserPass()))) throw new RuntimeException("Pass is not correct!!!");
 			}
 			
 			
