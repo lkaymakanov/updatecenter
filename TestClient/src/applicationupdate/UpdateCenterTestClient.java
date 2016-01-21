@@ -59,7 +59,7 @@ public class UpdateCenterTestClient {
 		String socketProtocol = keyVal.get("-socketprotocol")!=null ? keyVal.get("-socketprotocol").toLowerCase() : null;
 		String storeType = keyVal.get("-storetype")!=null ? keyVal.get("-storetype").toLowerCase() : null;
 		
-		String downloaddir = keyVal.get("-downloaddir")!=null ? keyVal.get("-downloaddir").toLowerCase() : "verions";
+		String downloaddir = keyVal.get("-downloaddir")!=null ? keyVal.get("-downloaddir").toLowerCase() : "versions";
 		String libdir = keyVal.get("-libdir")!=null ? keyVal.get("-libdir").toLowerCase() : "libs";
 		String jar = keyVal.get("-jar")!=null ? keyVal.get("-jar").toLowerCase() : "";
 		
