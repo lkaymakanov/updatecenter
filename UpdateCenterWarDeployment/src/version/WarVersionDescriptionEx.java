@@ -62,15 +62,17 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 	 * file is chunk!*/
 	private Map<String, Boolean> fileNameMap = new Hashtable<String, Boolean>();
 	
+	private Map<String, Boolean> packZips;
+	
 	
 	public WarVersionDescriptionEx(
-			String root, String warfile,  int chunkSize, int prefixLength , boolean deploy, IModalDailogProvider modalDialogProvider
-			) {
+			String root, String warfile,  int chunkSize, int prefixLength , boolean deploy, IModalDailogProvider modalDialogProvider,
+			Map<String, Boolean> packZips) {
 		this.modalDialogProvider = modalDialogProvider;
 		String wNameWithouExt = FileUtil.removeFileExtension(warfile);
 		this.warFileName = warfile;
 		this.prefixLength = prefixLength;
-		//create the directory wieht the version
+		//create the directory with the version
 		FileUtil.createDirIfNotExist(root + File.separator + wNameWithouExt);
 		this.root = root + File.separator + wNameWithouExt;
 		this.chunkSize = chunkSize;
@@ -94,6 +96,7 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 		String version = lastSlashInd > 0 ? fileDestination.substring(lastSlashInd+1) : fileDestination;
 		this.versionInfo.fileName  = version;
 		
+		this.packZips = packZips;
 	}
 	
 	
@@ -229,9 +232,6 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 		if(modalDialogProvider != null) modalDialogProvider.getModalDialog().setErrMsg( message);
 	}
 	
-	private void clearModal(){
-		if(modalDialogProvider != null) modalDialogProvider.getModalDialog().clear();
-	}
 	
 	@Override
 	public void publish() {
@@ -251,8 +251,10 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 					fileNameMap.put(l, true);
 					l = br.readLine();
 				}
+				
 				br.close();
 				versionInfo.libs = lib;
+				
 				
 				//split the war file without the libs into the memory
 				this.splitter = new MemoryFileSplitter(new File(ltfNolibWarPath), chunkSize);
@@ -276,6 +278,15 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 	}
 	
 	
+/*	private List<String> unitePackZipsWithversionLibs(){
+		List<String> l = new ArrayList<String>();
+		for(String s :packZips.keySet()){
+			l.add(s);
+		}
+		
+		l.addAll(versionInfo.libs);
+		return l;
+	}*/
 	
 	
 	
@@ -312,6 +323,7 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 			//set the needed libs
 			versionInfo.libs = Arrays.asList(libs);
 			
+			
 			//save the libs to file
 			//set the needed libs from copy dir
 			//store the lib files into a map and to a description file
@@ -319,6 +331,9 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 			PrintWriter libtextFile = new 	PrintWriter(new FileWriter(new File(libDescriptionFile)));
 			for(String s: libs){
 				libFileSet.add(s);
+				libtextFile.println(s);
+			}
+			for(String s: packZips.keySet()){
 				libtextFile.println(s);
 			}
 			libtextFile.close();
@@ -402,6 +417,9 @@ public class WarVersionDescriptionEx extends WarVersionDescription {
 		}
 		return b;
 	}
+	
+	
+	
 	
 	
 	

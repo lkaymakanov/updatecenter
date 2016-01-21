@@ -107,6 +107,7 @@ public class AppConstants {
 			synchronized (VERSION_VALIDATION_PATTERNS.class) {
 				prop.put(String.valueOf(new Date().getTime()), pattern);
 				FileUtil.saveProperties(prop, propFile);
+				initPropertiesByPropertyFile(propFile);
 			}
 		}
 		
@@ -119,6 +120,7 @@ public class AppConstants {
 			synchronized (VERSION_VALIDATION_PATTERNS.class) {
 				prop.remove(propetyKey);
 				FileUtil.saveProperties(prop, propFile);
+				initPropertiesByPropertyFile(propFile);
 			}
 		}
 		
