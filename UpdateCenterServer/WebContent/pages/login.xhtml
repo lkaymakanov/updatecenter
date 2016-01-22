@@ -15,10 +15,10 @@
 <a4j:keepAlive beanName="loginBean"></a4j:keepAlive>
 <body onload="errMsg();" style=" height:100%; width:100%; background-image:url('#{facesContext.externalContext.requestContextPath}/images/background.jpg');">
 	<h:form>
-		<div id="login"  style="position:relative; background-image:url('#{facesContext.externalContext.requestContextPath}/images/login.png'); width : 351px; height : 297px;" >
-			<h:inputText style="position:absolute; top:110px; left:73px;" value="#{loginBean.user.userName}" />
-			<h:inputText style="position:absolute; top:170px; left:73px;" value="#{loginBean.user.userPass}" />
-			<h:commandButton value="" style="background:transparent; position:absolute;left : 37px; width : 278px; top : 221px; height : 57px;"  action="#{loginBean.login}"></h:commandButton>
+		<div id="login"  style="position:relative; background-image:url('#{facesContext.externalContext.requestContextPath}/images/login.jpg'); width : 351px; height : 297px;" >
+			<h:inputText style="position:absolute; top:103px; height:30px; width:239px; left:73px; border:none; background:transparent; " value="#{loginBean.user.userName}" />
+			<h:inputText style="position:absolute; top:163px; left:73px; height:30px; width:239px; border:none; background:transparent;"  value="#{loginBean.user.userPass}" />
+			<h:commandButton value="" style="border:none; background:transparent; position:absolute;left : 37px; width : 278px; top : 221px; height : 57px;"  action="#{loginBean.login}"></h:commandButton>
 		</div>
 	</h:form>
 	

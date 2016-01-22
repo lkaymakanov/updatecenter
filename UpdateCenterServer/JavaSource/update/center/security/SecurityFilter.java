@@ -33,7 +33,7 @@ public class SecurityFilter implements Filter{
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 		
 		User u = getUserFromHttpServletRequest(httpServletRequest);
-		if(u == null){
+		if(u == null || u.getLogged() == 0){
 			//user is not logged and page is not login page - navigate to login page!!!!
 			if(!httpServletRequest.getRequestURL().toString().contains(LOGIN_PAGE)){
 				httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/" + LOGIN_PAGE);

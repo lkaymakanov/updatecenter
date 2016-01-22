@@ -29,6 +29,7 @@ import update.center.controllers.UpdateCenterController;
 import update.center.init.ApplicationInitListener;
 import update.center.init.ApplicationSessionManager;
 import update.center.init.HttpSessionEx;
+import update.center.security.User;
 import version.ModalDialog;
 import version.VersionDescriptions;
 import version.WarVersionDescription;
@@ -286,6 +287,16 @@ public class ManageVersionBean implements Serializable{
 	}
     
    
+	public int getLogged(){
+		User u = AppUtil.getCurrentUser();
+		return u == null ? 0 : u.getLogged();
+	}
+	
+	public void setLogged(int i){
+		User u = AppUtil.getCurrentUser();
+		if(u == null) return;
+		u.setLogged(i);
+	}
     
 	
 }

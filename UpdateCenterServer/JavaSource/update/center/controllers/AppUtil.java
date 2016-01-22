@@ -4,6 +4,8 @@ import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 
 import update.center.manager.ModalDialogProviderBean;
+import update.center.security.LoginBean;
+import update.center.security.User;
 import version.IModalDailogProvider;
 import version.ModalDialog;
 
@@ -30,5 +32,13 @@ public class AppUtil {
 	  public static FacesContext getFacesContext(){
 		return   FacesContext.getCurrentInstance();
 	  }
+	  
+	  
+	  
+	  public static User getCurrentUser(){
+		 Object o =  AppUtil.getFacesContext().getExternalContext().getSessionMap().get(LoginBean.USER_KEY);
+		 return o == null ? null : (User)o;
+	  }
+	  
 	  
 }

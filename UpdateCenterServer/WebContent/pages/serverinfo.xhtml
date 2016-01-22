@@ -12,16 +12,21 @@
 
 <ui:composition>
 		<script type="text/javascript" src="../scripts/common.js"></script>
+		<script type="text/javascript">
+			function exit(){
+				
+				document.getElementById('containerform:logOut').click();}
+		</script>
 <style>
 .rich-tabpanel-content {background-color: transparent; border: none;}
 .rich-fileupload-list-decor{ border: none; }
-.rich-tab-inactive {background-image: none; background-color: #C0C0C0;}
-.rich-tab-active {background-image: none; background-color: #F1F1F1;}
+.rich-tab-inactive {background-image: none; background-color: #6D6060; height: 40px; font-size: 18px; color:yellow; }
+.rich-tab-active {background-image: none; background:transparent; height: 40px;font-size: 18px; font-weight: bold; border-top:3px solid green; color: white;}
 </style>
 <a4j:keepAlive beanName="manageVersionBean"></a4j:keepAlive>
 <body onload="errMsg();" style="background-image:url('#{facesContext.externalContext.requestContextPath}/images/background.jpg');">
-<h:form>
-	<h:commandButton value="logOut" action="#{manageVersionBean.logOut}" />
+<h:form id="containerform">
+
 	<rich:tabPanel>
 		<rich:tab label="Manage versions">
 			<rich:panel id="managerversions" >
@@ -197,9 +202,24 @@
 				</rich:column>
 			</rich:dataTable>
 		</rich:tab>
+		<rich:tab styleClass="exit_cell" id="exit" oncomplete="exit();" > 
+		</rich:tab>
 	</rich:tabPanel>
 	
+	<h:commandButton style="visibility:hidden;" id="logOut"   value="logOut" action="#{manageVersionBean.logOut}" />
+	<h:inputHidden id="loggedStatus" value="#{manageVersionBean.logged}" />
 	
+	<!-- 
+		document.getElementById('containerform:logOut').click();
+	 -->
+	<script type="text/javascript">
+		jQuery('#containerform\\:exit_lbl').click(function () { document.getElementById('containerform:loggedStatus').value=0;});
+		jQuery('#containerform\\:exit_lbl').css('padding', '0px');
+		jQuery('#containerform\\:exit_lbl').html('<img onlick="alert(12313)" src="/UpdateCenterServer/images/exit.jpg"></img>');
+		if(jQuery('#containerform\\:loggedStatus').val() == '0') {
+			exit();
+		}
+	</script>
 	
 </h:form>
 
