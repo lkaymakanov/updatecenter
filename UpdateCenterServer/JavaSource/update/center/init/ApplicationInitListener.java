@@ -2,12 +2,16 @@ package update.center.init;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+
 
 
 
@@ -41,8 +45,11 @@ public class ApplicationInitListener implements ServletContextListener{
 		
 		
 		//copy pack zip for each java version into the server lib directory
-		String packFolder = new FindResource().getResourceUrl("pack").getFile();
+		URL url = new FindResource().getResourceUrl("pack");
+		System.out.println("Pack URL is " + URLDecoder.decode(url.toString()));
 		
+		String packFolder = URLDecoder.decode(new FindResource().getResourceUrl("pack").getFile());
+		System.out.println("Pack folder is " + packFolder);
 		File f = new  File(packFolder);
 		for(String child : f.list()){
 			System.out.println(packFolder + child);
@@ -55,6 +62,7 @@ public class ApplicationInitListener implements ServletContextListener{
 				throw new RuntimeException(e);
 			}
 		}
+
 		
 		//init version descriptions
 		VersionDescriptions.initDescriptions(AppUtil.getProvider(), packZips);
