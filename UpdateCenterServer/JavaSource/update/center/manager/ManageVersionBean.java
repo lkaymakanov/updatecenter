@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -43,6 +44,8 @@ public class ManageVersionBean implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 8426369952000322764L;
+	public static final ResourceBundle appBundle = ResourceBundle.getBundle("application");
+	public static final String finalName = appBundle.getString("finalName");
 
 	/**
 	 * Controller
@@ -54,6 +57,7 @@ public class ManageVersionBean implements Serializable{
 	List<HttpSessionEx> sessions = new ArrayList<HttpSessionEx>();
 	
 	private VersionInfo selectedVersionInfo = new  VersionInfo();
+	
 	
 	
 	/**
@@ -299,4 +303,7 @@ public class ManageVersionBean implements Serializable{
 	}
     
 	
+	public String getBuild(){
+		return finalName;
+	}
 }

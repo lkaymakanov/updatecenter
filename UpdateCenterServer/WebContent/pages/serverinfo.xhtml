@@ -209,6 +209,10 @@
 	<h:commandButton style="visibility:hidden;" id="logOut"   value="logOut" action="#{manageVersionBean.logOut}" />
 	<h:inputHidden id="loggedStatus" value="#{manageVersionBean.logged}" />
 	
+	<div style="color:aqua; opacity:0.7; font-style: italic; position: fixed; font-size:20px; top:10px; right:10px;">
+			#{manageVersionBean.build}
+	</div>
+	
 	<!-- 
 		document.getElementById('containerform:logOut').click();
 	 -->

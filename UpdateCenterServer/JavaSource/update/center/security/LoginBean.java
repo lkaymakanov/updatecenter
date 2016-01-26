@@ -10,6 +10,10 @@ import java.util.Properties;
 
 
 
+
+
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -17,9 +21,11 @@ import update.center.controllers.AppUtil;
 import update.center.init.ApplicationInitListener;
 import update.center.init.ApplicationSessionManager;
 import update.center.init.HttpSessionEx;
+import update.center.manager.ManageVersionBean;
 import version.ModalDialog;
 
 public class LoginBean implements Serializable{
+	
 	/**
 	 * 
 	 */
@@ -28,6 +34,7 @@ public class LoginBean implements Serializable{
 	private User user = new  User();
 	public final static String USER_KEY = "user";
 	private final static String SUCCESS_FULL_LOGIN  = "toServerInfo";
+	
 	
 	public String login(){
 		HttpServletRequest request = (HttpServletRequest) AppUtil.getFacesContext().getExternalContext().getRequest();
@@ -116,5 +123,11 @@ public class LoginBean implements Serializable{
 	modalDialogClear();
 	return null;
     }
+    
+    
+    public String getBuild(){
+		return ManageVersionBean.finalName;
+	}
+  
 	
 }

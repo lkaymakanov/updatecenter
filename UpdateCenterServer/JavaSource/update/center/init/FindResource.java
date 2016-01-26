@@ -6,7 +6,7 @@ import java.net.URL;
 
 public class FindResource {
 
-		
+	
 	public InputStream getResourceStream(String name){
 		return getClass().getClassLoader().getResourceAsStream(name);
 	}
