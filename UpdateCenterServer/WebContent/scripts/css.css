@@ -1,0 +1,15 @@
+@CHARSET "UTF-8";
+
+.rich-tabpanel-content {background-color: transparent; border: none;}
+.rich-fileupload-list-decor{ border: none; }
+.buttons { height: 30px; width: 80px;}
+
+/*
+input[type="image"]:disabled{
+	 border: 1px solid #999;color:#000;
+}*/
+input.manageapp[type="image"]:hover{
+    opacity:0.5;
+}
+.rich-tab-inactive {background-image: none; background-color: #6D6060; height: 40px; font-size: 18px; color:yellow; }
+.rich-tab-active {background-image: none; background:transparent; height: 40px;font-size: 18px; font-weight: bold; border-top:3px solid green; color: white;}

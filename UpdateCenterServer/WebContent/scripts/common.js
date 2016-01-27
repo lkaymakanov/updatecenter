@@ -1,25 +1,28 @@
-/**
-function obtainElementById(kind, srcId){
-	var objs = new Array();
-	var objects = document.getElementsByTagName(kind);
-//alert(objects.length);
-	for (var i=0; i < objects.length; i++){
-		var obj = objects[i];
-		var ids = (obj.id).split(':');
-		var last = ids[ids.length - 1];
-		if (last.substring(0, srcId.length) == srcId) {
-//alert(last.substring(0, srcId.length) + '|' + srcId);			
-			objs[objs.length] = obj;
-		}
-	}
-	return objs;
-}
-*/
 
+//init image link map
+var map = new   Map(); 
+map.set('delete.png', 'delete_dsbl.png' );
+map.set('publish.png', 'publish_dsbl.png');
+map.set('deploy.png', 'deploy_dsbl.png');
+map.set('stoppublish.png', 'stoppublish_dsbl.png');
+
+map.set('delete_dsbl.png', 'delete.png' );
+map.set('publish_dsbl.png', 'publish.png');
+map.set('deploy_dsbl.png', 'deploy.png');
+map.set('stoppublish_dsbl.png', 'stoppublish.png' );
+
+
+/**exit from application*/
+function exit(){
+	document.getElementById('containerform:logOut').click();
+}
+
+/**obtain modal dialog element*/
 function obtainElementById(modalForm){
 	return document.getElementById(modalForm+':'+'modalMsg');
 }
 
+/**shows the modal dialog if any message  is available*/
 function errMsg() {
 	var modalMsgs = obtainElementById('modalForm');
 	if ((modalMsgs.innerHTML.trim()).length > 0) {
@@ -30,11 +33,19 @@ function errMsg() {
 }
 
 
-function showLibModal(){
-	var modalMsgs = obtainElementById('modalForm2');
-	if ((modalMsgs.innerHTML.trim()).length > 0) {
-		Richfaces.showModalPanel('msgModal2');
-		return true;
-	}
-	return false;
- }
+/**
+jQuery.each(jQuery('input.manageapp'), function(ind, val){console.log(ind); console.log(val.disabled)});
+
+
+
+function invertImage(image){
+	 if(image.disabled == false) 
+	 var res=image.src.split('/');  
+	 image.src= '../images/'+ map.get(res[res.length-1]);
+}
+
+
+function createImages(){	
+	jQuery.each(jQuery('input.manageapp'), function(ind, image){invertImage(image);});
+}
+*/
