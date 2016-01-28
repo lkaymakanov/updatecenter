@@ -56,3 +56,8 @@ input[disabled].manageapp:hover{
 	font-size: 13px;
 	margin-bottom: 10px;	
 }
+
+.rich-mpnl-body{
+	padding:0px;
+	background-image:url('../images/background.jpg');
+}
