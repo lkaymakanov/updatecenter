@@ -1,31 +1,17 @@
 package update.center.security;
 
-import java.io.Serializable;
 import java.util.Properties;
-
-
-
-
-
-
-
-
-
-
-
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import update.center.controllers.AppUtil;
+import update.center.controllers.Bundles;
 import update.center.init.ApplicationInitListener;
 import update.center.init.ApplicationSessionManager;
 import update.center.init.HttpSessionEx;
-import update.center.manager.ManageVersionBean;
+import update.center.manager.CommonBean;
 import version.ModalDialog;
 
-public class LoginBean implements Serializable{
-	
+public class LoginBean extends CommonBean{
 	/**
 	 * 
 	 */
@@ -125,8 +111,8 @@ public class LoginBean implements Serializable{
     }
     
     
-    public String getBuild(){
-		return ManageVersionBean.finalName;
+	public String getBuild(){
+		return Bundles.footerBundle.getString("finalName");
 	}
   
 	

@@ -9,9 +9,13 @@
 
 <ui:composition>
 <script type="text/javascript" src="../scripts/common.js"></script>
+<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/scripts/css.css"/>
 <a4j:keepAlive beanName="loginBean"></a4j:keepAlive>
 <body onload="errMsg();" style=" height:100%; width:100%; background-image:url('#{facesContext.externalContext.requestContextPath}/images/background.jpg');">
 	<h:form>
+		<ui:include src="/pages/header.xhtml" >
+			<ui:param name="headerBean" value="#{loginBean.headerBan}" />
+		</ui:include>
 		<div id="login"  style="position:relative; background-image:url('#{facesContext.externalContext.requestContextPath}/images/login.jpg'); width : 351px; height : 297px;" >
 			<h:inputText style="position:absolute; top:103px; height:30px; width:239px; left:73px; border:none; background:transparent; " value="#{loginBean.user.userName}" />
 			<h:inputSecret style="position:absolute; top:163px; left:73px; height:30px; width:239px; border:none; background:transparent;"  value="#{loginBean.user.userPass}" />
@@ -19,9 +23,9 @@
 		</div>
 	</h:form>
 	
-	<div style="color:aqua; opacity:0.7; font-style: italic; position: fixed; font-size:20px; top:10px; right:10px;">
-			#{manageVersionBean.build}
-	</div>
+	<ui:include src="/pages/footer.xhtml" >
+		<ui:param name="footerBean" value="#{loginBean.footerBean}" />
+	</ui:include>
 	
 	<ui:include src="/pages/msgModal.xhtml" >
 		<ui:param name="xBean" value="#{loginBean}" />

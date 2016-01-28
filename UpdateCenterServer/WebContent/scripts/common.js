@@ -32,11 +32,15 @@ function errMsg() {
 	return false;
 }
 
+function manageBtnHover(btn){
+	btn.style.opacity = 0.5;
+}
 
+function manageBtnMouseLeave(btn){
+	btn.style.opacity = 1.0;
+}
 /**
 jQuery.each(jQuery('input.manageapp'), function(ind, val){console.log(ind); console.log(val.disabled)});
-
-
 
 function invertImage(image){
 	 if(image.disabled == false) 
