@@ -11,7 +11,7 @@
 <script type="text/javascript" src="../scripts/common.js"></script>
 <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/scripts/css.css"/>
 <a4j:keepAlive beanName="loginBean"></a4j:keepAlive>
-<body onload="errMsg();" style=" height:100%; width:100%; background-image:url('#{facesContext.externalContext.requestContextPath}/images/background.jpg');">
+<body onload="errMsg();" class="backimage">
 	<h:form>
 		<ui:include src="/pages/header.xhtml" >
 			<ui:param name="headerBean" value="#{loginBean.headerBan}" />

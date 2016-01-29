@@ -6,7 +6,19 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 	
+	<style >
+		.italic{
+			font-style: italic;
+		}
+	</style>
+	
 	<div class="buildnumber">
-			#{headerBean.build}
+		<h:outputText value="Update Center Server Manager" />
+		<table class="buildnumber" style="font-size:15px; color:gold; font-weight:bold; text-align:right; position:fixed;right:0px;top:0px;" border="0">
+			<tr><td><h:outputText styleClass="italic" style="text-align:right;" value="Version:" /><h:outputText value="#{headerBean.version}" /></td></tr>
+			<tr><td><h:outputText styleClass="italic" value="Build number:" /><h:outputText value="#{headerBean.buildnumber}" /></td></tr>
+			<tr><td><h:outputText styleClass="italic" value="Build date:" /><h:outputText value="#{headerBean.builddate} time #{headerBean.buildtime}" /></td></tr>
+		</table>
+		
 	</div>
 </ui:composition>

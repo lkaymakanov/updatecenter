@@ -34,42 +34,18 @@
 				</td></tr>
 			</table>	
 			<center>
-				<h:panelGrid columns="4" cellpadding="0" cellspacing="0">
-					<h:commandButton id="btnReport" 
-									   action="#{xBean.modalReport}" 
-									   styleClass="button"
-									   value="Report" 
-									   rendered="#{xBean.modalDialog.reportMsg!= null}" />
-					<h:commandButton id="btnOK" 
-									   action="#{xBean.modalOk}" 
-									   styleClass="button"
-									   value="OK" 
-									   rendered="#{xBean.modalDialog.errMsg != null || xBean.modalDialog.infoMsg != null}" />
-					<h:commandButton id="btnYes" 
-									   action="#{xBean.modalYes}"	
-									   styleClass="button"
-									   style="width : 100px;"
-									   value="Yes" 
-									   rendered="#{xBean.modalDialog.yesNoMsg != null}" 
-									   onclick="javascript:Richfaces.showModalPanel('panelPr');startProgress();"/>
-				    <rich:spacer width="15"/>
-					<h:commandButton id="btnNo"
-									   action="#{xBean.modalNo}" 
-									   styleClass=" button"
-									   style="width : 100px;"
-									   value="No" 
-									   rendered="#{xBean.modalDialog.yesNoMsg != null}" />	
-	 				<a4j:commandButton id="btnCancel" 
-	 								   action="#{xBean.modalDialogClear}"	
-	 								   styleClass="button"		
-									   value="Cancel" 
-									   rendered="false" />			   				   
+				<div style="position: relative;">
+				<h:commandButton  id="btnOK"  
+					styleClass="buttons manageapp" image="../images/btns/fancybutton.png"   
+					value="View App Libs"  action="#{xBean.modalOk}"  
+					 rendered="#{xBean.modalDialog.errMsg != null || xBean.modalDialog.infoMsg != null}"  />
+					 <span onclick="document.getElementById('modalForm:btnOK').click();"  class="fancybtntext">OK</span>
 					<rich:componentControl for="msgModal" 
 										   attachTo="btnOK,btnCancel,hidelink,btnYes,btnNo,btnReport" 
 										   operation="hide" 
 										   event="onclick" >
 					</rich:componentControl>
-				</h:panelGrid>
+				</div>
 			</center>
 	</rich:modalPanel>
 	</h:form>

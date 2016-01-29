@@ -50,15 +50,9 @@ public class ManageVersionBean extends CommonBean {
 	 * Controller
 	 */
 	private IUpdateCenterController c = UpdateCenterController.getIUpdateCenterController();
-    
 	private String pattern;
-	
-	List<HttpSessionEx> sessions = new ArrayList<HttpSessionEx>();
-	
 	private VersionInfo selectedVersionInfo = new  VersionInfo();
-	
-	
-	
+	private FileDownloadBean downloadBean = new FileDownloadBean();
 	
 	/**
 	 * File Upload Bean
@@ -306,4 +300,9 @@ public class ManageVersionBean extends CommonBean {
 	public String getBuild(){
 		return Bundles.appBundle.getString("finalName");
 	}
+
+	public FileDownloadBean getDownloadBean() {
+		return downloadBean;
+	}
+	
 }

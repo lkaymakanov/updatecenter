@@ -16,7 +16,7 @@
 
 		
 <a4j:keepAlive beanName="manageVersionBean"></a4j:keepAlive>
-<body onload="errMsg();" style="background-color:balck; background-image:url('#{facesContext.externalContext.requestContextPath}/images/background.jpg');">
+<body onload="errMsg();" class="backimage">
 <h:form id="containerform">
 	<ui:include src="/pages/header.xhtml" >
 		<ui:param name="headerBean" value="#{loginBean.headerBan}" />
@@ -58,11 +58,12 @@
 									<td class="rich-table-cell">#{desc.fileNamePattern}</td>
 									<td style="color:green; font-size:15px; font-weight:bold;" class="rich-table-cell">#{desc.status}</td>
 									<td class="rich-table-cell">
-										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="#{!desc.deployable ? '../images/deploy_dsbl.png' : '../images/deploy.png'}"  action="#{desc.deploy}" disabled="#{!desc.deployable}" />
-										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="#{!desc.publishable ? '../images/publish_dsbl.png' : '../images/publish.png'}" action="#{desc.publish}" disabled="#{!desc.publishable}" />
-										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="#{!desc.stoppublishable ? '../images/stoppublish_dsbl.png' : '../images/stoppublish.png'}" action="#{desc.stoppublish}" disabled="#{!desc.stoppublishable}" />
-										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="#{!desc.deletable ? '../images/delete_dsbl.png' : '../images/delete.png' }"  value="Detete" action="#{desc.delete}" disabled="#{!desc.deletable}" />
-										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="../images/info.png"   value="View App Libs" action="#{manageVersionBean.setSelectedVersionInfo(desc.versionInfo)}" />
+										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="#{!desc.deployable ? '../images/btns/deploy_dsbl.png' : '../images/btns/deploy.png'}"  action="#{desc.deploy}" disabled="#{!desc.deployable}" />
+										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="#{!desc.publishable ? '../images/btns/publish_dsbl.png' : '../images/btns/publish.png'}" action="#{desc.publish}" disabled="#{!desc.publishable}" />
+										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="#{!desc.stoppublishable ? '../images/btns/stoppublish_dsbl.png' : '../images/btns/stoppublish.png'}" action="#{desc.stoppublish}" disabled="#{!desc.stoppublishable}" />
+										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="#{!desc.deletable ? '../images/btns/delete_dsbl.png' : '../images/btns/delete.png' }"  value="Detete" action="#{desc.delete}" disabled="#{!desc.deletable}" />
+										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="../images/btns/info.png"   value="View App Libs" action="#{manageVersionBean.setSelectedVersionInfo(desc.versionInfo)}" />
+										<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="../images/btns/download.png"  value="download" action="#{manageVersionBean.downloadBean.download(desc.fileDestination, desc.versionInfo.fileName)}"></h:commandButton>
 									</td>
 								</tr>
 						</a4j:repeat>
@@ -153,11 +154,20 @@
 		<rich:tab label="Manage Patterns">
 			<rich:panel>
 				<f:facet name="header"><h:outputText value="Manage Patterns"/></f:facet>
-					<h:panelGrid columns="3">
-				 		<h:outputText value="Pattern:" />
-				 		<h:inputText style="width:600px;" value="#{manageVersionBean.pattern}" />
-				 		<h:commandButton value="Save" action="#{manageVersionBean.savePattern}"></h:commandButton>
-				 	</h:panelGrid>
+					<div class="manhelp italic" style="margin-bottom:0px;">* Patterns describe the rules that the version file names must follow in order to be deployed. </div>
+					<div class="manhelp italic">*The version name must be in the following format: <span style="font-weight: bold;">{FiLeNaMe_In_UpPeR_LoWeR_Case}-1.2-{versionumber}.war</span></div>
+					<table>
+						<tr>
+							<td><h:outputText  value="Pattern:" /></td>
+							<td><h:inputText style="width:600px;" value="#{manageVersionBean.pattern}" /></td>
+							<td><div style="position:relative;">
+					 		<h:commandButton   id="btnSave" 
+								styleClass="buttons manageapp" image="../images/btns/fancybutton.png"   
+								value="View App Libs"  action="#{manageVersionBean.savePattern}" />
+						 	<span onclick="document.getElementById('containerform:btnSave').click();" class="fancybtntext" style="left:-60px; top:-12px;">Save</span>
+						 </div></td>
+						</tr>
+					</table>
 				 	
 				<rich:dataTable value="#{manageVersionBean.patterns}" var="item">
 				 <f:facet name="header">
@@ -180,7 +190,7 @@
 					<h:outputText value="#{item.pattern}"/>
 				</rich:column>
 				<rich:column>
-					<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="../images/delete.png"  value="Detete"  action="#{item.deletePattern}"/>
+					<h:commandButton onmouseover="manageBtnHover(this);" onmouseout="manageBtnMouseLeave(this);" styleClass="buttons manageapp" image="../images/btns/delete.png"  value="Detete"  action="#{item.deletePattern}"/>
 				</rich:column>
 			</rich:dataTable>
 			</rich:panel>
@@ -199,6 +209,32 @@
 					<h:outputText value="#{item}"/>
 				</rich:column>
 			</rich:dataTable>
+		</rich:tab>
+		<rich:tab label="About">
+		<div class="italic" style="color:#FF9900;   width: 500px; text-align:center; padding:80px; font-size:20px;  ">
+			<marquee scrolldelay="500" height="400px" width="1000px" direction="up">
+				<pre>
+**************************************************************************************************
+
+	This project was strated with the idea to make WEB applications self updatetable.
+	The Update Center contains the new versions of WEB applications.
+	Currently the Update Center supports only the WAR file format.
+ 	When uploaded the WAR file is located in the Update Center root directory.
+ 
+ 	After that it must be <b>deployed</b>. The deploying process includes the following steps:
+ 	 1) WAR file is being unzipped.
+ 	 2) All the files from unzipped application lib directory are copied into the 
+ 	 Update Center lib directory.
+ 	 3) Files from application lib directory are deleted.
+ 	 4) Unzipped application is zipped back without the libraries.
+ 	 
+ 	Deployed application may be <b>published</b>.Then it is visible to the clients 
+ 	requesting the Update center checking for new versions and downloading them.
+ 
+**************************************************************************************************
+				</pre>
+			</marquee>
+		</div>
 		</rich:tab>
 		<rich:tab styleClass="exit_cell" id="exit" oncomplete="exit();" > 
 		</rich:tab>
