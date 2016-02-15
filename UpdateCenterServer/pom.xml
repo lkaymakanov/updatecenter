@@ -260,7 +260,7 @@
   		<dependency>
   			<groupId>UpdateCenterWarDeployment</groupId>
   			<artifactId>UpdateCenterWarDeployment</artifactId>
-  			<version>1.38</version>
+  			<version>1.39</version>
   		</dependency>
 	</dependencies>
 

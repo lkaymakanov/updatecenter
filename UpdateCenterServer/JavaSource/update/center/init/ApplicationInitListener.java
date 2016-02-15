@@ -7,14 +7,8 @@ import java.net.URLDecoder;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
-
-
-
-
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
 import net.is_bg.controller.AppConstants.VERSION_VALIDATION_PATTERNS;
 import net.is_bg.controller.ApplicationLibFiles;
@@ -63,6 +57,7 @@ public class ApplicationInitListener implements ServletContextListener{
 			}
 		}
 
+		//AppUtil.createSessionRegister(30, 2, TimeUnit.MINUTES);
 		
 		//init version descriptions
 		VersionDescriptions.initDescriptions(AppUtil.getProvider(), packZips);
