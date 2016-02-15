@@ -5,11 +5,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -18,6 +20,34 @@ import java.util.zip.ZipOutputStream;
 public class Packager
 {
     
+	
+	public static void main(String []args) throws IOException{
+
+		File f =new File("D:\\downloadversion\\versions\\unzip_real");
+		File out = new File("D:\\downloadversion\\versions\\LTF-xxxx.war");
+		List<File> ff = new  ArrayList<File>();
+		for(File s : f.listFiles()){
+			ff.add( s );
+		}
+		Packager.packZip(out, ff);
+	/*
+		//Packager.unZipIt("D:\\downloadversion\\versions\\LTF-xxxx.war", "D:\\downloadversion\\versions\\unzip");
+		String orgEntries = listEntries("D:\\downloadversion\\versions\\LTF_real.war");
+		System.out.println(orgEntries);
+		PrintWriter wr = new  PrintWriter(new File("out_real.txt"));
+		wr.println(orgEntries);
+		wr.close();
+		
+		orgEntries = listEntries("D:\\downloadversion\\versions\\LTF-xxxx.war");
+		System.out.println(orgEntries);
+		wr = new  PrintWriter(new File("out_xxxx.txt"));
+		wr.println(orgEntries);
+		wr.close();
+		//String orgEntry = listEntries("D:\\downloadversion\\versions\\LTF-1234.war");*/
+		
+		
+    }
+	
     /**
      * Pack zip.
      *
@@ -29,7 +59,7 @@ public class Packager
     {
         System.out.println("Packaging to " + output.getName());
         ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(output));
-        zipOut.setLevel(Deflater.DEFAULT_COMPRESSION);
+       // zipOut.setLevel(Deflater.DEFAULT_COMPRESSION);
 
         for (File source : sources)
         {
@@ -60,7 +90,7 @@ public class Packager
             return file;
         } else
         {
-            return path + File.separator + file;
+            return path +"/" + file;
         }
     }
 
@@ -81,7 +111,10 @@ public class Packager
         }
 
         File[] files = dir.listFiles();
+        
         path = buildPath(path, dir.getName());
+        String entryName = path;
+        zos.putNextEntry(new ZipEntry(entryName + "/"));
         //System.out.println("Adding Directory " + path);
 
         for (File source : files)
@@ -114,8 +147,10 @@ public class Packager
             return;
         }
 
+        String entryName = buildPath(path, file.getName());
+        System.out.println(entryName);
        // System.out.println("Compressing " + file.getName());
-        zos.putNextEntry(new ZipEntry(buildPath(path, file.getName())));
+        zos.putNextEntry(new ZipEntry(entryName));
 
         FileInputStream fis = new FileInputStream(file);
 
@@ -133,6 +168,20 @@ public class Packager
         zos.closeEntry();
     }
     
+    
+    public static  String listEntries(String zipFile) throws IOException{
+    	String s = "";
+    	//get the zip file content
+    	ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+    	//get the zipped file list entry
+    	ZipEntry ze = zis.getNextEntry();
+ 
+    	while(ze!=null){
+    		s+=ze.getName() + "\n";
+    		ze = zis.getNextEntry();
+    	}
+    	return s;
+    }
     
     /**
      * Unzip it - MkYoung utils
@@ -268,4 +317,6 @@ public class Packager
     		if(!f.exists())f.mkdir();
     	}
     }
+    
+    
 }
