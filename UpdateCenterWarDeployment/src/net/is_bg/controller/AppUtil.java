@@ -13,6 +13,10 @@ public class AppUtil {
 		return sessionRegister;
 	}
 	
+	public static void createSessionRegister(int maxSessions, long sessionTimeOut, TimeUnit timeUnit){
+		if(sessionRegister ==null) sessionRegister = SessionRegister.createSessionRegister(maxSessions, sessionTimeOut, timeUnit);
+	}
+	
 	public static ApplicationLibFiles getApplicationLibFiles(){
 		return ApplicationLibFiles.getApplicationLibFiles();
 	}

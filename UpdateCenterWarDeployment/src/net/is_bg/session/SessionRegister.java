@@ -111,7 +111,7 @@ public class SessionRegister {
 	 */
 	public static SessionRegister createSessionRegister(int maxSessions, long sessionTimeOut, TimeUnit unit){
 		SessionRegister sessionRegister =   new  SessionRegister(maxSessions, unit.toMillis(sessionTimeOut));
-		SessionRefresher.startSessionRefresher(sessionRegister, unit.toMillis(sessionTimeOut) - 30, TimeUnit.MILLISECONDS);
+		SessionRefresher.startSessionRefresher(sessionRegister, unit.toMillis(sessionTimeOut), TimeUnit.MILLISECONDS);
 		return sessionRegister;
 	}
 	
