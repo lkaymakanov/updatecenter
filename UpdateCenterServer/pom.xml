@@ -290,7 +290,7 @@
 					<exclude>**/*.ttf</exclude>
 					<exclude>**/*.gif</exclude>
 					<exclude>**/*.gif</exclude>
-					<exclude>**/*.zip</exclude>
+					<exclude>**/*.exe</exclude>
 				</excludes>
 			</resource>
 			<resource>
@@ -301,7 +301,7 @@
 					<include>**/*.TTF</include>
 					<include>**/*.ttf</include>
 					<include>**/*.gif</include>
-					<include>**/*.zip</include>
+					<include>**/*.exe</include>
 				</includes>
 			</resource>
 		</resources>

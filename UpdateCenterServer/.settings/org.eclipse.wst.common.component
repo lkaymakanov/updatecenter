@@ -5,6 +5,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/JavaSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/JavaResource"/>
         <property name="java-output-path" value="/UpdateCenterServer/WebContent/WEB-INF/classes"/>
-        <property name="context-root" value="UpdateCenterServer-0.0.1-SNAPSHOT-${buildNumber}"/>
+        <property name="context-root" value="UpdateCenterServer-1.2-${buildNumber}"/>
     </wb-module>
 </project-modules>
