@@ -3,6 +3,7 @@
 
 cd  %PATH_TO_UZIPPED_APP%
 echo %cd%
-jar.exe -cfv  %WAR_FILE%  *
+
+%PATH_TO_ZIP_EXE%\zip.exe -r  %PATH_TO_WAR%  *
 
 :end

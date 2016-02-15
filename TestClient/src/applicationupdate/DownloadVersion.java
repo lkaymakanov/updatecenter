@@ -13,6 +13,7 @@ import java.util.Set;
 
 
 
+
 //import net.is_bg.ltf.applicationscriptmanagement.FindResource;
 //import net.is_bg.ltf.db.common.impl.logging.LogSystemOut;
 //import net.is_bg.ltf.db.common.interfaces.logging.ILog;
@@ -57,13 +58,13 @@ import file.splitter.ByteChunk;
 class DownloadVersion  {
 	
 	//environment variable names  used by packwar.bat file
-	private final static String PATH_TO_UZIPPED_APP = "PATH_TO_UZIPPED_APP";
-	private final static String PATH = "Path";
-	private final static String WAR_FILE = "WAR_FILE";
-	private final static String BATCH_FILE_NAME = "packwar.bat";   //the name of the batch file used to make the war file!!!
+	//private final static String PATH_TO_UZIPPED_APP = "PATH_TO_UZIPPED_APP";
+	/*private final static String PATH = "Path";
+	private final static String WAR_FILE = "WAR_FILE";*/
+	private final static String BATCH_FILE_NAME = "createwar.bat";   //the name of the batch file used to make the war file!!!
 	
 	//path to the jar file & packwar script batch file
-	private  String  PATH_TO_JAR;
+	private  String  PATH_TO_ZIP_EXE;
 	
 	private String appName = "";
 	private String sessionid = "-1";
@@ -88,9 +89,9 @@ class DownloadVersion  {
 	public DownloadVersion(DownloadSettings dSettings) throws Exception{
 		paths = dSettings.getDownLoadPathsFiles();
 		if(paths.getPathToJar() == null || paths.getPathToJar().equals("")){
-			PATH_TO_JAR = new File("").getAbsolutePath();   //current directory
+			PATH_TO_ZIP_EXE = new File("").getAbsolutePath();   //current directory
 		}else{
-			PATH_TO_JAR = paths.getPathToJar();
+			PATH_TO_ZIP_EXE = paths.getPathToJar();
 		}
 		cfName = dSettings.getServerSettings().toClientConfigurationName();
 		DownLoadUtils.configureClientConfigurator(dSettings);
@@ -174,9 +175,9 @@ class DownloadVersion  {
 		unzip();
 		System.out.println(DownLoadUtils.singleHeaderLine("unzipping files successful...",  70));
 		
-		System.out.println(DownLoadUtils.toPrintTable("starting copying pack%VERSION%.zip files...", "COPYING FILES", 70));
-		copyPackJavaVerZipToJarPathDir();
-		System.out.println(DownLoadUtils.singleHeaderLine("copying pack%VERSION%.zip files successful...",  70));
+		//System.out.println(DownLoadUtils.toPrintTable("starting copying pack%VERSION%.zip files...", "COPYING FILES", 70));
+		//copyPackJavaVerZipToJarPathDir();
+		//System.out.println(DownLoadUtils.singleHeaderLine("copying pack%VERSION%.zip files successful...",  70));
 
 		//copy libraries to web inf directory
 		System.out.println(DownLoadUtils.toPrintTable("starting copying lib files to WEB-INF...", "COPYING LIB FILES TO WEB-INF", 70));
@@ -202,7 +203,7 @@ class DownloadVersion  {
 	 * @throws IOException
 	 * @throws InterruptedException 
 	 */
-	private void executeCommand(String cmdLineStr, Map<String, String> env) throws IOException, InterruptedException{
+	private static void executeCommand(String cmdLineStr, Map<String, String> env) throws IOException, InterruptedException{
 		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", cmdLineStr);
 		Map<String, String > pMap = builder.environment();
 		if(env!= null){
@@ -293,12 +294,12 @@ class DownloadVersion  {
 			
 			//copy pack_NUMBER_OF_JAVA_VERSION.zip file from lib directory to  the PATH_TO_JAR directory!!!
 			File sourcef = new File(paths.getLibDir() +File.separator + fName);
-			File destF = new File(PATH_TO_JAR +File.separator + fName);
+			File destF = new File(PATH_TO_ZIP_EXE +File.separator + fName);
 			System.out.println("copying  " + sourcef.getAbsolutePath() + " to " + destF.getAbsolutePath());
 			FileUtil.copyFile(sourcef, destF);
 			
 			//unzip the zip file into the PATH_TO_JAR directory
-			Packager.unZipIt(destF.getAbsolutePath(), PATH_TO_JAR);
+			Packager.unZipIt(destF.getAbsolutePath(), PATH_TO_ZIP_EXE);
 			
 			//delete source & destination zip files
 			sourcef.delete();
@@ -333,11 +334,13 @@ class DownloadVersion  {
 	private void createWarFile() throws IOException, InterruptedException{
 		//zip back into the original version war file using jar.exe
 		Map<String, String > p  = new  HashMap<String, String>();
-		p.put(PATH_TO_UZIPPED_APP, unzipDir);
-		p.put(PATH, PATH_TO_JAR);
-		p.put(WAR_FILE, versionInfo.getFileName());
-		executeCommand(PATH_TO_JAR + File.separator  + BATCH_FILE_NAME, p);
+		p.put("PATH_TO_UZIPPED_APP", unzipDir);
+		p.put("PATH_TO_ZIP_EXE", PATH_TO_ZIP_EXE);
+		p.put("PATH_TO_WAR", versionInfo.getFileName());
+		executeCommand(PATH_TO_ZIP_EXE + File.separator  + BATCH_FILE_NAME, p);
 	}
+	
+	
 	
 	private void performFinalSteps() throws IOException{
 		String downloadedVersionFile = unzipDir + File.separator + versionInfo.getFileName();
@@ -358,7 +361,18 @@ class DownloadVersion  {
 		//delete the unzip directory
 		System.out.println("Deleting  directory  " + unzipDir);
 		FileUtil.deleteDirectory(new File(unzipDir));
-		
 	}
 	
+	
+	public static void main(String []args) throws IOException, InterruptedException{
+		//new Downl
+		/*//String PATH_TO_ZIP_EXE = "PATH_TO_ZIP_EXE";
+		String PATH_TO_WAR = "PATH_TO_WAR";
+		Map<String, String > p  = new  HashMap<String, String>();
+		p.put(PATH_TO_UZIPPED_APP, "D:\\downloadversion\\versions\\61\\unzipappdir");
+		p.put(PATH_TO_ZIP_EXE, "D:\\downloadversion");
+		p.put(PATH_TO_WAR, "D:\\downloadversion\\versions\\61\\UpdateCenterServer-1.2-61.war");
+		DownloadVersion.executeCommand("D:\\downloadversion\\"+ "createwar.bat", p);*/
+		
+	}
 }

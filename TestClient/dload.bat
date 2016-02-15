@@ -1,0 +1,2 @@
+@echo on
+java -jar download.jar  -s 10.240.110.70 -p 8180 -app UpdateCenterServer -proto http -socketprotocol  ssl -storetype jks -keystorefile %cd%\client.keystore -keystorepass  KeyParola123 -keyalias ltf_wsclient -keypass KeyParola123
