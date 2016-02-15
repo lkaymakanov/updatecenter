@@ -1,14 +1,12 @@
 package update.center.init;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
 import net.is_bg.controller.AppConstants.CONTEXTPARAMS;
 import net.is_bg.controller.AppConstants.VERSION_VALIDATION_PATTERNS;
 import net.is_bg.controller.ApplicationLibFiles;
@@ -39,7 +37,7 @@ public class ApplicationInitListener implements ServletContextListener{
 		
 		
 		//copy pack zip for each java version into the server lib directory
-		URL url = new FindResource().getResourceUrl("pack");
+		/*URL url = new FindResource().getResourceUrl("pack");
 		System.out.println("Pack URL is " + URLDecoder.decode(url.toString()));
 		
 		String packFolder = URLDecoder.decode(new FindResource().getResourceUrl("pack").getFile());
@@ -55,7 +53,7 @@ public class ApplicationInitListener implements ServletContextListener{
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
-		}
+		}*/
 
 		//AppUtil.createSessionRegister(30, 2, TimeUnit.MINUTES);
 		
