@@ -7,9 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 
 
 
@@ -61,10 +64,10 @@ class DownloadVersion  {
 	//private final static String PATH_TO_UZIPPED_APP = "PATH_TO_UZIPPED_APP";
 	/*private final static String PATH = "Path";
 	private final static String WAR_FILE = "WAR_FILE";*/
-	private final static String BATCH_FILE_NAME = "createwar.bat";   //the name of the batch file used to make the war file!!!
+	//private final static String BATCH_FILE_NAME = "createwar.bat";   //the name of the batch file used to make the war file!!!
 	
 	//path to the jar file & packwar script batch file
-	private  String  PATH_TO_ZIP_EXE;
+	//private  String  PATH_TO_ZIP_EXE;
 	
 	private String appName = "";
 	private String sessionid = "-1";
@@ -88,11 +91,11 @@ class DownloadVersion  {
 	
 	public DownloadVersion(DownloadSettings dSettings) throws Exception{
 		paths = dSettings.getDownLoadPathsFiles();
-		if(paths.getPathToJar() == null || paths.getPathToJar().equals("")){
+		/*if(paths.getPathToJar() == null || paths.getPathToJar().equals("")){
 			PATH_TO_ZIP_EXE = new File("").getAbsolutePath();   //current directory
 		}else{
 			PATH_TO_ZIP_EXE = paths.getPathToJar();
-		}
+		}*/
 		cfName = dSettings.getServerSettings().toClientConfigurationName();
 		DownLoadUtils.configureClientConfigurator(dSettings);
 		
@@ -288,7 +291,7 @@ class DownloadVersion  {
 	/***
 	 * This copies the pack_NUMBER_OF_JAVA_VERSION.zip file from lib app lidir to JAR_PATH folder
 	 */
-	private void copyPackJavaVerZipToJarPathDir(){
+/*	private void copyPackJavaVerZipToJarPathDir(){
 		String fName = "pack" + JAVA_VERSION.getClientVersion().getNumber() + ".zip";
 		try {
 			
@@ -310,7 +313,7 @@ class DownloadVersion  {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-	}
+	}*/
 	
 	private void unzip(){
 		//create unzip app dir if not exists
@@ -332,12 +335,22 @@ class DownloadVersion  {
 	}
 	
 	private void createWarFile() throws IOException, InterruptedException{
+		
+		File f =new File(unzipDir);
+		//new File("D:\\downloadversion\\versions\\LTF-xxxx.war");
+		List<File> ff = new  ArrayList<File>();
+		for(File s : f.listFiles()){
+			ff.add(s);
+		}
+		File out = new File(unzipDir + File.separator + versionInfo.getFileName());
+		Packager.packZip(out, ff);
+		
 		//zip back into the original version war file using jar.exe
-		Map<String, String > p  = new  HashMap<String, String>();
+		/*Map<String, String > p  = new  HashMap<String, String>();
 		p.put("PATH_TO_UZIPPED_APP", unzipDir);
 		p.put("PATH_TO_ZIP_EXE", PATH_TO_ZIP_EXE);
 		p.put("PATH_TO_WAR", versionInfo.getFileName());
-		executeCommand(PATH_TO_ZIP_EXE + File.separator  + BATCH_FILE_NAME, p);
+		executeCommand(PATH_TO_ZIP_EXE + File.separator  + BATCH_FILE_NAME, p);*/
 	}
 	
 	
