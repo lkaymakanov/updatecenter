@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -23,14 +21,14 @@ public class Packager
 	
 	public static void main(String []args) throws IOException{
 
-		File f =new File("D:\\downloadversion\\versions\\unzip_real");
+		/*File f =new File("D:\\downloadversion\\versions\\unzip_real");
 		File out = new File("D:\\downloadversion\\versions\\LTF-xxxx.war");
 		List<File> ff = new  ArrayList<File>();
 		for(File s : f.listFiles()){
 			ff.add( s );
 		}
 		Packager.packZip(out, ff);
-	/*
+	
 		//Packager.unZipIt("D:\\downloadversion\\versions\\LTF-xxxx.war", "D:\\downloadversion\\versions\\unzip");
 		String orgEntries = listEntries("D:\\downloadversion\\versions\\LTF_real.war");
 		System.out.println(orgEntries);
@@ -154,7 +152,7 @@ public class Packager
 
         FileInputStream fis = new FileInputStream(file);
 
-        byte[] buffer = new byte[4092];
+        byte[] buffer = new byte[409200];
         int byteCount = 0;
         while ((byteCount = fis.read(buffer)) != -1)
         {
