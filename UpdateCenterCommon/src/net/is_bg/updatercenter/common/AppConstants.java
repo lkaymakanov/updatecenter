@@ -12,6 +12,7 @@ public class AppConstants {
 	public final static String SESSIONS_SUB_PATH = "/sessions";
 	public final static String CREATE_SESSION_SUB_PATH = "/session";
 	public final static String LIBS_SUB_PATH = "/libs";
+	public final static String PING_SUB_PATH = "/ping";
 	
 	public final static String PARAM_SESSION_ID = "sessionid";
 	public final static String PARAM_MUNICIPALITY_ID = "municipalityId";
