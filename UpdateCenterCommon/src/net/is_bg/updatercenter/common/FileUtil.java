@@ -148,7 +148,7 @@ public final class FileUtil {
             OutputStream out = new FileOutputStream(targetLocation);
             try{
 	            // Copy the bits from instream to outstream
-	            byte[] buf = new byte[1024];
+	            byte[] buf = new byte[1024*1024];
 	            int len;
 	            while ((len = in.read(buf)) > 0) {
 	                out.write(buf, 0, len);
@@ -166,6 +166,7 @@ public final class FileUtil {
 	 * @param destFile
 	 * @throws IOException
 	 */
+	@SuppressWarnings("resource")
 	public static void copyFile(File sourceFile, File destFile)
 			throws IOException {
 		if (!sourceFile.exists()) {
