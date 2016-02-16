@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.is_bg.updatercenter.common.FileData;
+import net.is_bg.updatercenter.common.Ping;
 import net.is_bg.updatercenter.common.RequestParams;
 import net.is_bg.updatercenter.common.resources.Session;
 import net.is_bg.updatercenter.common.resources.VersionInfo;
@@ -64,5 +65,12 @@ public interface IUpdateCenterController {
 	 * @return
 	 */
 	public List<Session> getSessionsInfo();
+
+	
+	/**
+	 * Returns basic info about server if available!!!
+	 * @return
+	 */
+	public Ping ping();
 	
 }

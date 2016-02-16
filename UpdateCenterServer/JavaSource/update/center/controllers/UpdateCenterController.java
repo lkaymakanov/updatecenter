@@ -32,7 +32,7 @@ public class UpdateCenterController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path(AppConstants.PING_SUB_PATH)
 	public Ping ping(@Context UriInfo info){
-		return new Ping();// controller.getSessionsIds();
+		return  controller.ping();
 		
 	}
 	
@@ -213,6 +213,12 @@ public class UpdateCenterController {
 		public List<Session> getSessionsInfo() {
 			// TODO Auto-generated method stub
 			return AppUtil.getSessionRegister().getSessions();
+		}
+
+		@Override
+		public Ping ping() {
+			// TODO Auto-generated method stub
+			return new Ping();
 		}
 	};
 	
