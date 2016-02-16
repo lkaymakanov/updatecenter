@@ -1,41 +1,27 @@
 package applicationupdate;
 
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-
-
-
-
-//import net.is_bg.ltf.applicationscriptmanagement.FindResource;
-//import net.is_bg.ltf.db.common.impl.logging.LogSystemOut;
-//import net.is_bg.ltf.db.common.interfaces.logging.ILog;
 import net.is_bg.updatercenter.common.AppConstants;
 import net.is_bg.updatercenter.common.Enumerators;
+import net.is_bg.updatercenter.common.Enumerators.PARAMS;
 import net.is_bg.updatercenter.common.FileData;
 import net.is_bg.updatercenter.common.FileUtil;
 import net.is_bg.updatercenter.common.RequestParams;
-import net.is_bg.updatercenter.common.Enumerators.PARAMS;
 import net.is_bg.updatercenter.common.crc.Crc;
 import net.is_bg.updatercenter.common.resources.Session;
 import net.is_bg.updatercenter.common.resources.VersionInfo;
 import net.is_bg.updatercenter.common.zippack.Packager;
-import applicationupdate.ClientJavaVersion.JAVA_VERSION;
-
 import com.cc.rest.client.Requester;
 import com.cc.rest.client.Requester.MEDIA_TYPE;
 import com.cc.rest.client.enumerators.IREST_PATH;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import file.splitter.ByteChunk;
 
 
@@ -49,7 +35,6 @@ import file.splitter.ByteChunk;
 	- download necessary libraries
 	- create war file
 
-
 3.Build up version
 	- merge the file chunks - this must be a zip file of the new version without the libraries !!!
 	- unzip the result file!!!
@@ -60,15 +45,6 @@ import file.splitter.ByteChunk;
  */
 class DownloadVersion  {
 	
-	//environment variable names  used by packwar.bat file
-	//private final static String PATH_TO_UZIPPED_APP = "PATH_TO_UZIPPED_APP";
-	/*private final static String PATH = "Path";
-	private final static String WAR_FILE = "WAR_FILE";*/
-	//private final static String BATCH_FILE_NAME = "createwar.bat";   //the name of the batch file used to make the war file!!!
-	
-	//path to the jar file & packwar script batch file
-	//private  String  PATH_TO_ZIP_EXE;
-	
 	private String appName = "";
 	private String sessionid = "-1";
 	private VersionInfo versionInfo;
@@ -77,7 +53,7 @@ class DownloadVersion  {
 	private String cfName;
 	private RequestParams requestParams = new RequestParams();
 	private DownLoadPathsFiles paths;
-	
+	private long DLOAD_FILES_DELAY_IN_MILLIS = 2000;
 	//private ILog log = new  LogSystemOut();
 	
 	/**The main path pointing to update center jersey servlet*/
@@ -91,11 +67,6 @@ class DownloadVersion  {
 	
 	public DownloadVersion(DownloadSettings dSettings) throws Exception{
 		paths = dSettings.getDownLoadPathsFiles();
-		/*if(paths.getPathToJar() == null || paths.getPathToJar().equals("")){
-			PATH_TO_ZIP_EXE = new File("").getAbsolutePath();   //current directory
-		}else{
-			PATH_TO_ZIP_EXE = paths.getPathToJar();
-		}*/
 		cfName = dSettings.getServerSettings().toClientConfigurationName();
 		DownLoadUtils.configureClientConfigurator(dSettings);
 		
@@ -122,6 +93,7 @@ class DownloadVersion  {
 				.get(MEDIA_TYPE.JSON).getResponseObject(VersionInfo.class);
 		return v;
 	}
+	
 	
 	private Session getSession(RequestParams params) throws  Exception {
 		Session session = Requester.request(cfName).path(MAIN_PATH)
@@ -157,7 +129,7 @@ class DownloadVersion  {
 	}
 	
 
-	public void update() throws  Exception {
+	public void download() throws  Exception {
 		// TODO Auto-generated method stub
 		//get the last version from the server & the pieces it is split into 
 		getLatestVersion();
@@ -177,10 +149,6 @@ class DownloadVersion  {
 		System.out.println(DownLoadUtils.toPrintTable("starting unzipping files...", "UNZIPPING FILES", 70));
 		unzip();
 		System.out.println(DownLoadUtils.singleHeaderLine("unzipping files successful...",  70));
-		
-		//System.out.println(DownLoadUtils.toPrintTable("starting copying pack%VERSION%.zip files...", "COPYING FILES", 70));
-		//copyPackJavaVerZipToJarPathDir();
-		//System.out.println(DownLoadUtils.singleHeaderLine("copying pack%VERSION%.zip files successful...",  70));
 
 		//copy libraries to web inf directory
 		System.out.println(DownLoadUtils.toPrintTable("starting copying lib files to WEB-INF...", "COPYING LIB FILES TO WEB-INF", 70));
@@ -199,31 +167,7 @@ class DownloadVersion  {
 	}
 	
 	
-	/***
-	 * Executes command from the command line!!!
-	 * @param cmdLineStr - the command String
-	 * @param log - the custom logger!!!
-	 * @throws IOException
-	 * @throws InterruptedException 
-	 */
-	private static void executeCommand(String cmdLineStr, Map<String, String> env) throws IOException, InterruptedException{
-		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", cmdLineStr);
-		Map<String, String > pMap = builder.environment();
-		if(env!= null){
-			for(Map.Entry<String, String> entry : env.entrySet())
-			pMap.put(entry.getKey(), entry.getValue());
-		}
-        builder.redirectErrorStream(true);
-        Process p = builder.start();
-       // p.waitFor();
-        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        while (true) {
-            line = r.readLine();
-            if (line == null) { break; }
-            System.out.println(line);
-        }
-	}
+	
 	
 	/**
 	 * Determines the latest version
@@ -254,7 +198,7 @@ class DownloadVersion  {
 		    b.size = b.buffer.length;
 		    System.out.println("Byte Chunk number " +  i + " with size " + b.size + " Bytes received successfuly" );
 			os.write(b.buffer, 0, b.size);
-			Thread.sleep(2000);
+			Thread.sleep(DLOAD_FILES_DELAY_IN_MILLIS);
 			i++;
 		}
 		os.close();
@@ -283,11 +227,77 @@ class DownloadVersion  {
 			os.write(b.buffer, 0, b.size);
 			os.close();
 			os.flush();
-			Thread.sleep(2000);
+			Thread.sleep(DLOAD_FILES_DELAY_IN_MILLIS);
 			System.out.println( "File " + s+"  with size " + b.size + " Bytes received successfuly" );
 		}
 	}
 
+
+	
+	private void unzip(){
+		//create unzip app dir if not exists
+		unzipDir = versionDir + File.separator + "unzipappdir";
+		FileUtil.createDirIfNotExist(unzipDir);
+		
+		//unzip the application without the libs
+		System.out.println("Unzipping " + zipVersionFile + " to " +  unzipDir);
+		Packager.unZipIt(zipVersionFile, unzipDir);
+	}
+	
+	private void copyLibsToWebInf() throws IOException{
+		//copy the libraries into the application lib dir!!!
+		String applicationlibPath = unzipDir + File.separator + "WEB-INF" + File.separator + "lib";
+		File applib = new File(applicationlibPath);
+		if(!applib.exists()) applib.mkdir();
+		System.out.println("Copying lib files  from " + libdir  + " to " + applicationlibPath);
+		FileUtil.copyDirectory(new File(paths.getLibDir()), applib);
+	}
+	
+	private void createWarFile() throws IOException, InterruptedException{
+		File f =new File(unzipDir);
+		List<File> ff = new  ArrayList<File>();
+		for(File s : f.listFiles()){
+			ff.add(s);
+		}
+		File out = new File(unzipDir + File.separator + versionInfo.getFileName());
+		Packager.packZip(out, ff);
+	}
+	
+	
+	
+	private void performFinalSteps() throws IOException{
+		String downloadedVersionFile = unzipDir + File.separator + versionInfo.getFileName();
+		
+		//delete the .warnolib file
+		res = new File(zipVersionFile);
+		res.delete();
+		
+		//copy the war file to the version number directory
+		System.out.println("Remove " + versionInfo.getFileName() + " from   " + unzipDir + File.separator + versionInfo.getFileName() + " to " + versionDir + File.separator + versionInfo.getFileName());
+		FileUtil.copyFile(new File(unzipDir + File.separator + versionInfo.getFileName()), new File(versionDir + File.separator + versionInfo.getFileName()));
+		
+		//calculate the crc 32 of  the received file & compare it to received crc 32 hash of the version info
+		long receivedFileCrc32 = Crc.checksumMappedFile(downloadedVersionFile);
+		System.out.println("Original " + versionInfo.getFileName() + " crc32 is " + versionInfo.crc32);
+		System.out.println("Received " + versionInfo.getFileName() + " crc32 is " + receivedFileCrc32);
+		
+		//delete the unzip directory
+		System.out.println("Deleting  directory  " + unzipDir);
+		FileUtil.deleteDirectory(new File(unzipDir));
+	}
+	
+	
+	
+	
+	/*//String PATH_TO_ZIP_EXE = "PATH_TO_ZIP_EXE";
+	String PATH_TO_WAR = "PATH_TO_WAR";
+	Map<String, String > p  = new  HashMap<String, String>();
+	p.put(PATH_TO_UZIPPED_APP, "D:\\downloadversion\\versions\\61\\unzipappdir");
+	p.put(PATH_TO_ZIP_EXE, "D:\\downloadversion");
+	p.put(PATH_TO_WAR, "D:\\downloadversion\\versions\\61\\UpdateCenterServer-1.2-61.war");
+	DownloadVersion.executeCommand("D:\\downloadversion\\"+ "createwar.bat", p);*/
+	
+	
 	/***
 	 * This copies the pack_NUMBER_OF_JAVA_VERSION.zip file from lib app lidir to JAR_PATH folder
 	 */
@@ -315,77 +325,29 @@ class DownloadVersion  {
 		}
 	}*/
 	
-	private void unzip(){
-		//create unzip app dir if not exists
-		unzipDir = versionDir + File.separator + "unzipappdir";
-		FileUtil.createDirIfNotExist(unzipDir);
-		
-		//unzip the application without the libs
-		System.out.println("Unzipping " + zipVersionFile + " to " +  unzipDir);
-		Packager.unZipIt(zipVersionFile, unzipDir);
-	}
-	
-	private void copyLibsToWebInf() throws IOException{
-		//copy the libraries into the application lib dir!!!
-		String applicationlibPath = unzipDir + File.separator + "WEB-INF" + File.separator + "lib";
-		File applib = new File(applicationlibPath);
-		if(!applib.exists()) applib.mkdir();
-		System.out.println("Copying lib files  from " + libdir  + " to " + applicationlibPath);
-		FileUtil.copyDirectory(new File(paths.getLibDir()), applib);
-	}
-	
-	private void createWarFile() throws IOException, InterruptedException{
-		
-		File f =new File(unzipDir);
-		//new File("D:\\downloadversion\\versions\\LTF-xxxx.war");
-		List<File> ff = new  ArrayList<File>();
-		for(File s : f.listFiles()){
-			ff.add(s);
+	/***
+	 * Executes command from the command line!!!
+	 * @param cmdLineStr - the command String
+	 * @param log - the custom logger!!!
+	 * @throws IOException
+	 * @throws InterruptedException 
+	 */
+	/*private static void executeCommand(String cmdLineStr, Map<String, String> env) throws IOException, InterruptedException{
+		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", cmdLineStr);
+		Map<String, String > pMap = builder.environment();
+		if(env!= null){
+			for(Map.Entry<String, String> entry : env.entrySet())
+			pMap.put(entry.getKey(), entry.getValue());
 		}
-		File out = new File(unzipDir + File.separator + versionInfo.getFileName());
-		Packager.packZip(out, ff);
-		
-		//zip back into the original version war file using jar.exe
-		/*Map<String, String > p  = new  HashMap<String, String>();
-		p.put("PATH_TO_UZIPPED_APP", unzipDir);
-		p.put("PATH_TO_ZIP_EXE", PATH_TO_ZIP_EXE);
-		p.put("PATH_TO_WAR", versionInfo.getFileName());
-		executeCommand(PATH_TO_ZIP_EXE + File.separator  + BATCH_FILE_NAME, p);*/
-	}
-	
-	
-	
-	private void performFinalSteps() throws IOException{
-		String downloadedVersionFile = unzipDir + File.separator + versionInfo.getFileName();
-		
-		//delete the .warnolib file
-		res = new File(zipVersionFile);
-		res.delete();
-		
-		//copy the war file to the version number directory
-		System.out.println("Remove " + versionInfo.getFileName() + " from   " + unzipDir + File.separator + versionInfo.getFileName() + " to " + versionDir + File.separator + versionInfo.getFileName());
-		FileUtil.copyFile(new File(unzipDir + File.separator + versionInfo.getFileName()), new File(versionDir + File.separator + versionInfo.getFileName()));
-		
-		//calculate the crc 32 of  the received file & compare it to received crc 32 hash of the version info
-		long receivedFileCrc32 = Crc.checksumMappedFile(downloadedVersionFile);
-		System.out.println("Original " + versionInfo.getFileName() + " crc32 is " + versionInfo.crc32);
-		System.out.println("Received " + versionInfo.getFileName() + " crc32 is " + receivedFileCrc32);
-		
-		//delete the unzip directory
-		System.out.println("Deleting  directory  " + unzipDir);
-		FileUtil.deleteDirectory(new File(unzipDir));
-	}
-	
-	
-	public static void main(String []args) throws IOException, InterruptedException{
-		//new Downl
-		/*//String PATH_TO_ZIP_EXE = "PATH_TO_ZIP_EXE";
-		String PATH_TO_WAR = "PATH_TO_WAR";
-		Map<String, String > p  = new  HashMap<String, String>();
-		p.put(PATH_TO_UZIPPED_APP, "D:\\downloadversion\\versions\\61\\unzipappdir");
-		p.put(PATH_TO_ZIP_EXE, "D:\\downloadversion");
-		p.put(PATH_TO_WAR, "D:\\downloadversion\\versions\\61\\UpdateCenterServer-1.2-61.war");
-		DownloadVersion.executeCommand("D:\\downloadversion\\"+ "createwar.bat", p);*/
-		
-	}
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+       // p.waitFor();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while (true) {
+            line = r.readLine();
+            if (line == null) { break; }
+            System.out.println(line);
+        }
+	}*/
 }

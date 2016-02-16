@@ -79,7 +79,7 @@ public class UpdateCenterTestClient {
 		dSettings.setKeystorePass(keystorePass);
 		
 		DownloadVersion updater = new DownloadVersion(dSettings);
-		updater.update();
+		updater.download();
 		
 		
 	}
