@@ -16,6 +16,7 @@ import net.is_bg.controller.AppUtil;
 import net.is_bg.controller.UpdateCenterDispatcher;
 import net.is_bg.updatercenter.common.AppConstants;
 import net.is_bg.updatercenter.common.FileData;
+import net.is_bg.updatercenter.common.Ping;
 import net.is_bg.updatercenter.common.RequestParams;
 import net.is_bg.updatercenter.common.resources.Session;
 import net.is_bg.updatercenter.common.resources.VersionInfo;
@@ -25,6 +26,15 @@ import version.WAR_FILE_STATUS;
 
 @Path(AppConstants.PATH_APPLICATION)
 public class UpdateCenterController {
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path(AppConstants.PING_SUB_PATH)
+	public Ping ping(@Context UriInfo info){
+		return new Ping();// controller.getSessionsIds();
+		
+	}
 	
 	/***
 	 * Returns information about the application version!!!
@@ -107,6 +117,8 @@ public class UpdateCenterController {
 		return controller.getSessionsIds();
 		
 	}
+	
+	
 	
 	
 	/**
