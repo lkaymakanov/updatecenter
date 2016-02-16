@@ -3,13 +3,6 @@
   <groupId>UpdateCenterCommon</groupId>
   <artifactId>UpdateCenterCommon</artifactId>
   <version>0.1</version>
-  <dependencies>
-		<dependency>
-			<groupId>CC</groupId>
-			<artifactId>CCRest</artifactId>
-			<version>2.0</version>
-		</dependency>
-	</dependencies>
 	<repositories>
   <repository>
     <id>mdtteam-mvn-repo</id>
@@ -65,4 +58,11 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+  	<dependency>
+			<groupId>CC</groupId>
+			<artifactId>CCRest</artifactId>
+			<version>2.3</version>
+	 </dependency>
+  </dependencies>
 </project>
