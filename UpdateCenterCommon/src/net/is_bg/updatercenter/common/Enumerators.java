@@ -71,6 +71,12 @@ public class Enumerators {
 		return p;
 	}
 	
+	public static IREST_PATH getPingSubPath(){
+		SELECTIVE_PATHS p = new  SELECTIVE_PATHS();
+		p.setPath(AppConstants.PING_SUB_PATH);
+		return p;
+	}
+	
 	public static IREST_PATH getSessionsSubPath(){
 		SELECTIVE_PATHS p = new  SELECTIVE_PATHS();
 		p.setPath(AppConstants.SESSIONS_SUB_PATH + "/");
