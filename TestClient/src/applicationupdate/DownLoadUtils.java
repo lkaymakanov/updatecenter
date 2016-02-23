@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.is_bg.updatercenter.common.Enumerators;
+import net.is_bg.updatercenter.common.Ping;
 
 import com.cc.rest.client.ClientConfigurator;
 import com.cc.rest.client.ClientConfigurator.Ssl;
@@ -44,6 +45,21 @@ public class DownLoadUtils {
 			}
 		finally{
 			//lock.unLock();
+		}
+	}
+	
+	public static boolean ping(DownloadSettings dSettings){
+		try{
+			String cfName = dSettings.getServerSettings().toClientConfigurationName();
+			configureClientConfigurator(dSettings);
+			@SuppressWarnings("unchecked")
+			Ping p = Requester.request(cfName).path(DownloadVersion.MAIN_PATH)
+					.subPath(Enumerators.getPingSubPath())
+					.get(MEDIA_TYPE.JSON)
+					.getResponseObject(Ping.class);
+			return p!=null;
+		}catch(Exception e){
+			return false;
 		}
 	}
 	
@@ -148,9 +164,6 @@ public class DownLoadUtils {
 		}
 	
 	}
-	
-	
-	
 
 	
 }
