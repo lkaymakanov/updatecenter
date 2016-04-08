@@ -35,6 +35,13 @@
 			<version>1.2</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>dblib</groupId>
+			<artifactId>dblib</artifactId>
+			<version>1.2.5304</version>
+		</dependency>
+		
 
 <!--
 		<dependency>

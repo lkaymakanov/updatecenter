@@ -35,6 +35,7 @@ public class ApplicationInitListener implements ServletContextListener{
 		//read validation patterns property files
 		VERSION_VALIDATION_PATTERNS.initPropertiesByPropertyFile(CONTEXTPARAMS.UPDATE_CENTER_VALIDATION_PATTERN_PROPERTY_FILE.getValue().toString());
 		
+		new DataSourceConnectionFactory().getConnection("jdbc/mycon");
 		
 		//copy pack zip for each java version into the server lib directory
 		/*URL url = new FindResource().getResourceUrl("pack");
